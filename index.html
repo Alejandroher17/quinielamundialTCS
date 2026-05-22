@@ -1,0 +1,1283 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Copa Mundial TCS - VAR Engine</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+        /* Variables CSS para transición dinámica de temas Claro / Oscuro */
+        :root {
+            --bg-color: #020617;
+            --bg-gradient-radial: radial-gradient(circle at 50% 0%, rgba(6, 182, 212, 0.18) 0%, transparent 60%),
+                                  radial-gradient(circle at 100% 100%, rgba(99, 102, 241, 0.12) 0%, transparent 50%);
+            --bg-lines-color: rgba(255, 255, 255, 0.005);
+            --card-bg: rgba(3, 7, 18, 0.75);
+            --text-title: #ffffff;
+            --text-body: #cbd5e1;
+            --text-muted: #64748b;
+            --cyber-border: rgba(6, 182, 212, 0.15);
+            --cyber-border-hover: rgba(6, 182, 212, 0.35);
+            --terminal-bg: rgba(1, 2, 6, 0.9);
+            --input-bg: #0f172a;
+            --input-border: #1e293b;
+        }
+
+        .light-mode {
+            --bg-color: #edf4fb;
+            --bg-gradient-radial: radial-gradient(circle at top left, rgba(56, 189, 248, 0.18) 0%, transparent 35%),
+                                  radial-gradient(circle at bottom right, rgba(99, 102, 241, 0.10) 0%, transparent 40%),
+                                  linear-gradient(135deg, #f8fbff 0%, #e8f1fb 100%);
+            --bg-lines-color: rgba(15, 23, 42, 0.025);
+            --card-bg: rgba(255, 255, 255, 0.94);
+            --text-title: #020617;
+            --text-body: #0f172a;
+            --text-muted: #475569;
+            --cyber-border: rgba(148, 163, 184, 0.25);
+            --cyber-border-hover: rgba(56, 189, 248, 0.55);
+            --terminal-bg: rgba(255, 255, 255, 0.82);
+            --input-bg: rgba(255, 255, 255, 0.92);
+            --input-border: rgba(148, 163, 184, 0.35);
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: var(--bg-color);
+            background-image: 
+                var(--bg-gradient-radial),
+                linear-gradient(var(--bg-lines-color) 1px, transparent 1px),
+                linear-gradient(90deg, var(--bg-lines-color) 1px, transparent 1px);
+            background-size: 100% 100%, 100% 100%, 30px 30px, 30px 30px;
+            color: var(--text-body);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .mono-font {
+            font-family: 'Share Tech Mono', monospace;
+        }
+
+        /* Paneles tácticos de vidrio cibernético */
+        .cyber-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid var(--cyber-border);
+            border-radius: 24px;
+            box-shadow: 0 10px 40px rgba(59, 130, 246, 0.05), 0 2px 8px rgba(15, 23, 42, 0.02);
+            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Color de texto del título adaptable */
+        .title-text {
+            color: var(--text-title);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            transition: color 0.3s ease;
+        }
+
+        /* Inputs adaptables al tema */
+        .theme-input {
+            background-color: var(--input-bg);
+            border-color: var(--input-border);
+            color: var(--text-title);
+            transition: all 0.3s ease;
+        }
+        
+        .theme-input:focus {
+            outline: none;
+            border-color: #38bdf8;
+            box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.16);
+            transform: translateY(-1px);
+        }
+
+        /* Efecto de escaneo láser en el decodificador */
+        @keyframes radar-sweep {
+            0% { transform: translateY(-100%); opacity: 0; }
+            50% { opacity: 0.6; }
+            100% { transform: translateY(100%); opacity: 0; }
+        }
+        .radar-line {
+            animation: radar-sweep 4s infinite linear;
+        }
+
+        /* Pulsación del estado del sistema */
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #10b981;
+            border-radius: 50%;
+            box-shadow: 0 0 12px #10b981;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.9); opacity: 0.4; }
+            50% { transform: scale(1.3); opacity: 1; }
+            100% { transform: scale(0.9); opacity: 0.4; }
+        }
+
+        /* Animación del brillo de la copa */
+        @keyframes glowTrophy {
+            0%, 100% { filter: drop-shadow(0 0 5px rgba(234, 179, 8, 0.35)); }
+            50% { filter: drop-shadow(0 0 25px rgba(234, 179, 8, 0.75)); }
+        }
+        .trophy-glow {
+            animation: glowTrophy 3s infinite ease-in-out;
+        }
+
+        /* Transición interactiva premium de tarjetas de escenarios */
+        .scenario-card {
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            overflow: hidden;
+            border-color: var(--cyber-border);
+        }
+        .scenario-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(6, 182, 212, 0.1), transparent);
+            transition: all 0.5s;
+        }
+        .scenario-card:hover::before {
+            left: 100%;
+        }
+        .scenario-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--cyber-border-hover);
+            background: rgba(6, 182, 212, 0.04);
+        }
+        .scenario-card.active {
+            border-color: #06b6d4;
+            background: rgba(6, 182, 212, 0.12);
+            box-shadow: 0 0 25px rgba(6, 182, 212, 0.25);
+            transform: scale(1.02);
+        }
+
+        /* Animación de destello al recalcular puntos */
+        @keyframes count-flash {
+            0% { transform: scale(1); filter: brightness(1); }
+            50% { transform: scale(1.12); filter: brightness(1.5); text-shadow: 0 0 20px rgba(6, 182, 212, 0.8); }
+            100% { transform: scale(1); filter: brightness(1); }
+        }
+        .flash-active {
+            animation: count-flash 0.4s ease-out;
+        }
+
+        /* Animación de los popups del balón al patearlo */
+        @keyframes float-up {
+            0% { transform: translateY(0) scale(0.8); opacity: 1; }
+            100% { transform: translateY(-80px) scale(1.2); opacity: 0; }
+        }
+        .floating-text {
+            animation: float-up 0.8s forwards cubic-bezier(0.25, 1, 0.5, 1);
+            pointer-events: none;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 800;
+        }
+
+        /* Transiciones generales fluidas */
+        body,
+        .cyber-card,
+        .scenario-card,
+        .theme-input,
+        button {
+            transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body class="min-h-screen pb-12 select-none overflow-x-hidden" onclick="spawnSoccerBallFromBackground(event)">
+
+    <!-- BARRA DEL HEADER DE ALTA GAMA -->
+    <header class="border-b border-cyan-500/10 bg-slate-950/90 backdrop-blur-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-2.5 flex items-center justify-between gap-2">
+            
+            <div class="flex items-center gap-2 sm:gap-4 overflow-hidden">
+                <!-- COPA DEL MUNDO FLOTANTE (VECTORIAL INTERACTIVA - LANZA BALÓN AL HACER CLIC) -->
+                <div id="trophy-btn" class="trophy-glow shrink-0 cursor-pointer hover:scale-110 active:scale-95 transition-transform duration-300" onclick="spawnSoccerBall(event)" title="¡Haz clic para lanzar un balón interactivo!">
+                    <svg class="h-10 sm:h-12 w-auto" viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Copa base verde malaquita rings -->
+                        <ellipse cx="60" cy="148" rx="28" ry="8" fill="#15803d" />
+                        <ellipse cx="60" cy="140" rx="25" ry="6" fill="#166534" />
+                        <ellipse cx="60" cy="144" rx="26" ry="3" fill="#22c55e" opacity="0.6"/>
+                        <!-- Cuerpo de la copa dorada con gradientes -->
+                        <defs>
+                            <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#fef08a" />
+                                <stop offset="30%" stop-color="#eab308" />
+                                <stop offset="70%" stop-color="#ca8a04" />
+                                <stop offset="100%" stop-color="#854d0e" />
+                            </linearGradient>
+                            <linearGradient id="glowEffect" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" stop-color="#ffffff" stop-opacity="0.8"/>
+                                <stop offset="100%" stop-color="#eab308" stop-opacity="0"/>
+                            </linearGradient>
+                        </defs>
+                        <!-- Peana Dorada de Apoyo -->
+                        <path d="M40 135 C 40 135, 36 150, 60 152 C 84 150, 80 135, 80 135 Z" fill="url(#goldGrad)" />
+                        <!-- Anillos de Malaquita en la Base -->
+                        <rect x="42" y="132" width="36" height="4" rx="2" fill="#14532d" />
+                        <rect x="44" y="124" width="32" height="4" rx="2" fill="#14532d" />
+                        <!-- Columnas de soporte estilizadas -->
+                        <path d="M48 124 C 44 110, 48 90, 56 86 C 58 96, 52 114, 48 124 Z" fill="url(#goldGrad)" />
+                        <path d="M72 124 C 76 110, 72 90, 64 86 C 62 96, 68 114, 72 124 Z" fill="url(#goldGrad)" />
+                        <path d="M50 86 C 45 75, 42 62, 54 50 C 58 65, 55 80, 50 86 Z" fill="url(#goldGrad)" />
+                        <path d="M70 86 C 75 75, 78 62, 66 50 C 62 65, 65 80, 70 86 Z" fill="url(#goldGrad)" />
+                        <!-- El Globo Terráqueo en la cumbre -->
+                        <circle cx="60" cy="46" r="22" fill="url(#goldGrad)" />
+                        <!-- Relieves continentales dorados brillantes -->
+                        <path d="M44 42 C 46 36, 54 34, 58 38 C 52 42, 46 46, 44 42 Z" fill="#fef08a" opacity="0.8" />
+                        <path d="M64 36 C 70 34, 76 40, 74 46 C 68 46, 66 40, 64 36 Z" fill="#fef08a" opacity="0.8" />
+                        <path d="M50 56 C 54 50, 66 50, 70 56 C 62 58, 54 58, 50 56 Z" fill="#fef08a" opacity="0.8" />
+                        <!-- Aura de destello -->
+                        <circle cx="60" cy="46" r="21" fill="url(#glowEffect)" style="mix-blend-mode: overlay;" />
+                    </svg>
+                </div>
+
+                <!-- SECCIÓN LOGOTIPO DE TCS® RECREADO VECTORIALMENTE -->
+                <div class="flex items-center shrink-0">
+                    <svg class="h-8 sm:h-10 w-auto" viewBox="0 0 280 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Símbolo Entrelazado de TCS -->
+                        <defs>
+                            <linearGradient id="tcsBlue" x1="0" y1="0" x2="1" y2="1">
+                                <stop offset="0%" stop-color="#0066ff"/>
+                                <stop offset="100%" stop-color="#0ea5e9"/>
+                            </linearGradient>
+                            <linearGradient id="tcsGreen" x1="0" y1="0" x2="1" y2="1">
+                                <stop offset="0%" stop-color="#00d285"/>
+                                <stop offset="100%" stop-color="#10b981"/>
+                            </linearGradient>
+                        </defs>
+                        <!-- Cinta Azul Izquierda/Arriba -->
+                        <path d="M55 12 L75 32 L40 68 L20 48 Z" fill="url(#tcsBlue)" opacity="0.95" />
+                        <!-- Cinta Verde Derecha/Abajo -->
+                        <path d="M40 32 L75 68 L55 88 L20 52 Z" fill="url(#tcsGreen)" opacity="0.95" />
+                        <!-- Zona de intersección oscura para dar profundidad 3D -->
+                        <path d="M40 32 L55 48 L40 68 L20 48 Z" fill="#003ba3" opacity="0.4" />
+                        
+                        <!-- Tipografía tcs estilizada -->
+                        <path d="M100 24 H116 V34 H100 V64 C100 70, 106 72, 112 72 H118 V82 C104 82, 90 80, 90 64 V34 H82 V24 H90 V10 H100 V24 Z" fill="#ffffff" />
+                        <path d="M154 38 C144 38, 134 44, 134 56 C134 68, 144 74, 154 74 C162 74, 168 70, 172 64 L180 70 C174 78, 164 84, 152 84 C130 84, 118 70, 118 56 C118 42, 132 28, 154 28 C166 28, 174 34, 178 42 L170 48 C166 42, 160 38, 154 38 Z" fill="#ffffff" />
+                        <path d="M210 38 C202 38, 196 40, 196 46 C196 52, 204 54, 212 56 C224 60, 230 64, 230 72 C230 80, 220 84, 208 84 C194 84, 186 78, 182 72 L190 66 C194 72, 200 74, 208 74 C214 74, 218 72, 218 68 C218 64, 212 62, 206 60 C194 56, 184 52, 184 44 C184 34, 196 28, 210 28 C222 28, 230 32, 234 38 L226 44 C222 40, 216 38, 210 38 Z" fill="#ffffff" />
+                        <!-- Símbolo Registrado R -->
+                        <circle cx="248" cy="34" r="6" stroke="#ffffff" stroke-width="1.2" />
+                        <text x="245" y="38" fill="#ffffff" font-size="7" font-family="sans-serif" font-weight="bold">R</text>
+                    </svg>
+                </div>
+
+                <div class="hidden xl:block h-6 w-[1px] bg-slate-800"></div>
+                <h1 class="hidden xl:block text-xs font-bold tracking-wider uppercase text-slate-400">
+                    SISTEMA AUTOMÁTICO DE REGLAMENTO <span class="text-cyan-400">VAR ENGINE v3.6</span>
+                </h1>
+            </div>
+
+            <!-- Panel de Estado Operacional e Interruptores de Tema/Reloj -->
+            <div class="flex items-center gap-3 sm:gap-6 text-[11px] mono-font">
+                <!-- Modo Claro/Oscuro Toggle Button -->
+                
+
+                <div class="hidden sm:flex items-center gap-2">
+                    <span class="text-slate-500 uppercase">Estado:</span>
+                    <div class="flex items-center gap-1.5">
+                        <span class="pulse-dot"></span>
+                        <span class="text-emerald-400 font-bold">ONLINE</span>
+                    </div>
+                </div>
+                
+                <div class="text-slate-400 select-all shrink-0">
+                    <span id="live-clock">--:--:-- PM</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 mt-6 sm:mt-8 space-y-8 sm:space-y-10">
+
+        <!-- SECCIÓN 1: INTRODUCCIÓN -->
+        <section class="cyber-card rounded-xl p-5 sm:p-8 relative overflow-hidden" onclick="event.stopPropagation()">
+            <div class="absolute -right-20 -top-20 w-80 h-80 bg-cyan-500/5 rounded-full blur-3xl pointer-events-none"></div>
+
+            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+                <div>
+                    <h2 class="text-xl sm:text-2xl font-bold uppercase tracking-wider title-text flex items-center gap-2">
+                        Reglamento de la Quiniela <span class="text-cyan-400">Copa Mundial TCS</span>
+                    </h2>
+                    <p class="text-xs sm:text-sm text-slate-400 mt-2 max-w-3xl leading-relaxed">
+                        Bienvenido a la consola interactiva de arbitraje de la Quiniela. Haz clic en las tarjetas de reglamento abajo para auditar el caso correspondiente en vivo mediante el simulador del VAR. <strong class="text-cyan-400">¡Haz clic en la Copa del Mundo o en el fondo de la pantalla para lanzar balones interactivos!</strong>
+                    </p>
+                </div>
+                <div class="shrink-0 flex items-center gap-2">
+                    <button onclick="playWhistle()" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3.5 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold rounded-lg text-xs uppercase tracking-wider shadow-lg shadow-cyan-500/10 hover:shadow-cyan-500/20 transition-all duration-300">
+                        <span>📣</span> Silbato del Árbitro
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 2: GRID DE REGLAS INTERACTIVAS Y DECODIFICADOR CENTRAL (UNIFICADOS) -->
+        <section class="space-y-4" onclick="event.stopPropagation()">
+            <div class="flex items-center gap-2">
+                <span class="text-cyan-400 text-lg">⚏</span>
+                <h3 class="text-base font-bold uppercase tracking-wider title-text">Reglamento Interactivo con Casos de Estudio</h3>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+                
+                <!-- Columna Izquierda: Tarjetas Selectoras de Reglas / Escenarios (5 Cols) -->
+                <div class="lg:col-span-5 flex flex-col gap-3 justify-between">
+                    
+                    <!-- Regla 1 / Caso 1 -->
+                    <div onclick="selectScenario('caso1')" id="card-caso1" class="scenario-card cursor-pointer cyber-card rounded-xl p-4 flex items-center gap-4 border border-rose-500/20 hover:border-rose-500/40">
+                        <div class="w-12 h-12 rounded-lg bg-rose-500/10 border border-rose-500/20 flex items-center justify-center shrink-0">
+                            <span class="text-xl select-none">❌</span>
+                        </div>
+                        <div class="w-full min-w-0 flex items-center justify-between gap-3">
+                            <div class="min-w-0">
+                                <span class="text-[10px] sm:text-[11px] font-bold text-rose-500 uppercase tracking-wide">No Acertado</span>
+                                <h4 class="text-sm font-bold title-text mt-0.5 truncate flex items-center gap-1.5">
+                                    <span>🇺🇾</span> URU <span class="text-xs text-slate-500 font-normal">vs</span> CRC <span>🇨🇷</span>
+                                </h4>
+                            </div>
+                            <span class="text-xs sm:text-sm md:text-base font-black bg-rose-950 text-rose-400 border border-rose-700/60 px-3 py-1.5 rounded-lg mono-font shrink-0 shadow-md shadow-rose-950/40">0 PTS</span>
+                        </div>
+                    </div>
+
+                    <!-- Regla 2 / Caso 2 -->
+                    <div onclick="selectScenario('caso2')" id="card-caso2" class="scenario-card cursor-pointer cyber-card rounded-xl p-4 flex items-center gap-4 border border-blue-500/20 hover:border-blue-500/40">
+                        <div class="w-12 h-12 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center shrink-0">
+                            <span class="text-xl select-none">📈</span>
+                        </div>
+                        <div class="w-full min-w-0 flex items-center justify-between gap-3">
+                            <div class="min-w-0">
+                                <span class="text-[10px] sm:text-[11px] font-bold text-blue-400 uppercase tracking-wide">Ganador Acertado</span>
+                                <h4 class="text-sm font-bold title-text mt-0.5 truncate flex items-center gap-1.5">
+                                    <span>🇦🇷</span> ARG <span class="text-xs text-slate-500 font-normal">vs</span> IRN <span>🇮🇷</span>
+                                </h4>
+                            </div>
+                            <span class="text-xs sm:text-sm md:text-base font-black bg-blue-950 text-blue-400 border border-blue-700/60 px-3 py-1.5 rounded-lg mono-font shrink-0 shadow-md shadow-blue-950/40">1 PT</span>
+                        </div>
+                    </div>
+
+                    <!-- Regla 3 / Caso 3 -->
+                    <div onclick="selectScenario('caso3')" id="card-caso3" class="scenario-card cursor-pointer cyber-card rounded-xl p-4 flex items-center gap-4 border border-emerald-500/20 hover:border-emerald-500/40">
+                        <div class="w-12 h-12 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center shrink-0">
+                            <span class="text-xl select-none">☑</span>
+                        </div>
+                        <div class="w-full min-w-0 flex items-center justify-between gap-3">
+                            <div class="min-w-0">
+                                <span class="text-[10px] sm:text-[11px] font-bold text-emerald-400 uppercase tracking-wide">Marcador Exacto</span>
+                                <h4 class="text-sm font-bold title-text mt-0.5 truncate flex items-center gap-1.5">
+                                    <span>🇰🇷</span> KOR <span class="text-xs text-slate-500 font-normal">vs</span> BEL <span>🇧🇪</span>
+                                </h4>
+                            </div>
+                            <span class="text-xs sm:text-sm md:text-base font-black bg-emerald-950 text-emerald-400 border border-emerald-700/60 px-3 py-1.5 rounded-lg mono-font shrink-0 shadow-md shadow-emerald-950/40">3 PTS</span>
+                        </div>
+                    </div>
+
+                    <!-- Regla 4 / Caso 4 (Alemania) -->
+                    <div onclick="selectScenario('alemania')" id="card-alemania" class="scenario-card cursor-pointer cyber-card rounded-xl p-4 flex items-center gap-4 border border-amber-500/20 hover:border-amber-500/40">
+                        <div class="w-12 h-12 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
+                            <span class="text-xl select-none">⚡</span>
+                        </div>
+                        <div class="w-full min-w-0 flex items-center justify-between gap-3">
+                            <div class="min-w-0">
+                                <span class="text-[10px] sm:text-[11px] font-bold text-amber-400 uppercase tracking-wide">Puntos extras por Goleada</span>
+                                <h4 class="text-sm font-bold title-text mt-0.5 truncate flex items-center gap-1.5">
+                                    <span>🇧🇷</span> BRA <span class="text-xs text-slate-500 font-normal">vs</span> GER <span>🇩🇪</span>
+                                </h4>
+                            </div>
+                            <span class="text-xs sm:text-sm md:text-base font-black bg-amber-950 text-amber-400 border border-amber-700/60 px-2 py-1.5 rounded-lg mono-font shrink-0 shadow-md shadow-amber-950/40">1 PT/GOL</span>
+                        </div>
+                    </div>
+
+                    <!-- Regla 5 / Caso 5 (Portugal) -->
+                    <div onclick="selectScenario('portugal')" id="card-portugal" class="scenario-card cursor-pointer cyber-card rounded-xl p-4 flex items-center gap-4 border border-purple-500/20 hover:border-purple-500/40">
+                        <div class="w-12 h-12 rounded-lg bg-purple-500/10 border border-purple-500/20 flex items-center justify-center shrink-0">
+                            <span class="text-xl select-none">🛡</span>
+                        </div>
+                        <div class="w-full min-w-0 flex items-center justify-between gap-3">
+                            <div class="min-w-0">
+                                <span class="text-[10px] sm:text-[11px] font-bold text-purple-400 uppercase tracking-wide">Fase Eliminatoria</span>
+                                <h4 class="text-sm font-bold title-text mt-0.5 truncate flex items-center gap-1.5">
+                                    <span>🏴󠁧󠁢󠁥󠁮󠁧󠁿</span> ENG <span class="text-xs text-slate-500 font-normal">vs</span> POR <span>🇵🇹</span>
+                                </h4>
+                            </div>
+                            <span class="text-xs sm:text-sm md:text-base font-black bg-purple-950 text-purple-400 border border-purple-700/60 px-3 py-1.5 rounded-lg mono-font shrink-0 shadow-md shadow-purple-950/40">FILTRO</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Columna Derecha: Decodificador Central del VAR (7 Cols) -->
+                <div class="lg:col-span-7 cyber-card rounded-2xl p-4 sm:p-6 flex flex-col justify-between relative overflow-hidden">
+                    
+                    <!-- Línea de escaneo láser decorativa -->
+                    <div class="absolute inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent opacity-40 radar-line pointer-events-none"></div>
+
+                    <div class="flex justify-between items-center border-b border-slate-800/80 pb-3 mb-4">
+                        <div>
+                            <h4 class="text-xs sm:text-sm font-bold tracking-wider text-cyan-400 uppercase">Análisis Tecnológico de Regla</h4>
+                            <p class="text-[10px] sm:text-xs text-slate-500 mt-1" id="deco-stage">Fase de Grupos - Grupo D</p>
+                        </div>
+                        <span class="text-[9px] sm:text-[10px] text-cyan-400 tracking-widest mono-font bg-cyan-950/80 border border-cyan-800 px-2.5 py-1 rounded uppercase shrink-0">
+                            Auditoría VAR
+                        </span>
+                    </div>
+
+                    <div class="space-y-6">
+                        <!-- Panel del Marcador (Puntos Importantes: Banderas Gigantes adaptables) -->
+                        <div class="grid grid-cols-3 items-center bg-slate-900/30 dark:bg-slate-900/50 border border-white/5 rounded-xl p-3 sm:p-5 relative">
+                            <!-- Team 1 -->
+                            <div class="flex flex-col items-center gap-2">
+                                <span class="text-4xl sm:text-6xl filter drop-shadow-[0_0_15px_rgba(255,255,255,0.15)] select-none" id="deco-flag-l">🇺🇾</span>
+                                <span class="text-xs font-bold title-text uppercase tracking-wider mono-font" id="deco-name-l">URU</span>
+                            </div>
+
+                            <!-- Centro: Pred vs Real -->
+                            <div class="text-center space-y-1 sm:space-y-2">
+                                <div class="text-[9px] uppercase tracking-widest text-slate-500 font-bold">Predicción</div>
+                                <div class="text-2xl sm:text-3xl font-extrabold title-text mono-font" id="deco-pred">2 - 1</div>
+                                
+                                <div class="inline-block px-2 sm:px-3 py-0.5 sm:py-1 bg-slate-950 border border-slate-800 rounded-full text-[10px] sm:text-xs text-cyan-400 font-bold" id="deco-real">
+                                    Real: 1 - 3
+                                </div>
+                            </div>
+
+                            <!-- Team 2 -->
+                            <div class="flex flex-col items-center gap-2">
+                                <span class="text-4xl sm:text-6xl filter drop-shadow-[0_0_15px_rgba(255,255,255,0.15)] select-none" id="deco-flag-v">🇨🇷</span>
+                                <span class="text-xs font-bold title-text uppercase tracking-wider mono-font" id="deco-name-v">CRC</span>
+                            </div>
+                        </div>
+
+                        <!-- Detalles Técnicos -->
+                        <div class="space-y-2">
+                            <span class="text-[10px] sm:text-xs font-bold text-slate-500 uppercase tracking-widest">Explicación Oficial de Puntos</span>
+                            <p class="text-xs text-slate-300 leading-relaxed bg-slate-900/10 dark:bg-slate-900/40 p-3 rounded-lg border border-white/5" id="deco-explanation">
+                                El usuario pronosticó una victoria de Uruguay por 2-1, pero el resultado real fue una victoria de Costa Rica por 1-3. Ningún acierto de tendencia.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Botón de Simulación Directa -->
+                    <div class="mt-6 pt-4 border-t border-slate-900/80 flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <span class="text-[9px] sm:text-[10px] text-slate-500 mono-font">COMPLIANT TCS PROTOCOL v3.6</span>
+                        <button onclick="injectCurrentScenarioToSimulator()" class="w-full sm:w-auto px-4 py-2 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs uppercase tracking-wider rounded transition-all">
+                            Copiar al simulador interactivo 📝
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SECCIÓN 3: MODULO INTERACTIVO DE SIMULACIÓN "EL VAR ENGINE" -->
+        <!-- NOTA DE DISEÑO: Se utiliza h-fit y sticky para que en PC el panel de resultados flote de forma interactiva a un lado sin scroll -->
+        <section id="modulo-var" class="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 pt-6 items-start" onclick="event.stopPropagation()">
+            
+            <!-- PANEL DE CONTROL / ENTRADAS (Columna Izquierda - 7 Cols) -->
+            <div class="lg:col-span-7 space-y-6">
+                <div class="cyber-card rounded-xl p-4 sm:p-6 border border-cyan-500/20 relative">
+                    <span class="absolute top-4 right-4 text-[10px] text-cyan-400 border border-cyan-500/30 px-2 py-0.5 rounded font-bold uppercase mono-font tracking-widest hidden sm:block">PRO SIMULATOR</span>
+                    
+                    <h3 class="text-base sm:text-lg font-bold title-text uppercase tracking-wider flex items-center gap-2">
+                        <span>📊</span> Consola del Simulador Reactivo
+                    </h3>
+                    <p class="text-xs text-slate-400">Modifica los valores del marcador. El motor de auditoría recalcula automáticamente en vivo todos los puntos.</p>
+
+                    <!-- Switch de Tipo de Partido -->
+                    <div class="mt-4">
+                        <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">Fase del Torneo</label>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button onclick="changeMode('grupos')" id="switch-grupos" class="py-2 rounded-lg text-xs font-bold uppercase tracking-wider border transition-all duration-300 bg-cyan-950 text-cyan-400 border-cyan-500/30">
+                                Fase de Grupos
+                            </button>
+                            <button onclick="changeMode('eliminatoria')" id="switch-elim" class="py-2 rounded-lg text-xs font-bold uppercase tracking-wider border transition-all duration-300 bg-slate-900/50 text-slate-500 border-transparent hover:text-slate-300">
+                                Rondas Eliminatorias
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Entradas de Equipos (Siglas cambian Banderas automáticamente) -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4 pt-4 border-t border-slate-800">
+                        <div>
+                            <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">Local (ARG, BRA, VEN, etc.)</label>
+                            <div class="flex items-center gap-3 bg-slate-950/40 dark:bg-slate-950/60 border border-slate-800 rounded-lg px-2.5 py-1 focus-within:border-cyan-500/50 transition-all">
+                                <span id="eq-emoji-l" class="text-2xl filter drop-shadow select-none">🇦🇷</span>
+                                <input type="text" id="eq-name-l" value="ARG" class="bg-transparent text-white text-xs font-bold uppercase tracking-wider w-full focus:outline-none">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1 text-left sm:text-right">Visitante (FRA, CRC, GER, etc.)</label>
+                            <div class="flex items-center gap-3 bg-slate-950/40 dark:bg-slate-950/60 border border-slate-800 rounded-lg px-2.5 py-1 focus-within:border-cyan-500/50 transition-all">
+                                <input type="text" id="eq-name-v" value="FRA" class="bg-transparent text-white text-xs font-bold uppercase tracking-wider w-full text-left sm:text-right focus:outline-none">
+                                <span id="eq-emoji-v" class="text-2xl filter drop-shadow select-none">🇫🇷</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- MEJORA PREMIUM: Distribución en Paralelo de Predicción y Resultado en Escritorio -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                        
+                        <!-- PREDICCIÓN (Tu Pronóstico) -->
+                        <div class="bg-slate-950/20 dark:bg-slate-950/80 rounded-xl p-3 border border-white/5 relative flex flex-col justify-between">
+                            <span class="text-[11px] font-bold text-cyan-400 uppercase tracking-widest block mb-3 text-center">🔮 Tu Predicción (Marcador)</span>
+                            <div class="flex items-center justify-center gap-3">
+                                
+                                <!-- Input Local -->
+                                <div class="flex flex-col items-center gap-1">
+                                    <div class="flex items-center gap-1">
+                                        <span id="pred-flag-l-mini" class="text-base">🇦🇷</span>
+                                        <span class="text-[9px] text-slate-500 font-bold tracking-widest" id="lbl-pred-l">ARG</span>
+                                    </div>
+                                    <input type="number" id="input-pred-l" value="2" min="0" class="w-14 h-10 theme-input border rounded-lg text-center text-lg font-bold focus:border-cyan-500 focus:outline-none">
+                                    
+                                    <!-- Clasifica Local (Eliminatorias) -->
+                                    <button onclick="toggleAdvance('pred', 'L')" id="adv-pred-l" class="elim-filter mt-1 px-2.5 py-0.5 text-[8px] font-bold rounded border border-transparent bg-slate-855 text-slate-500 transition-all uppercase tracking-wider hidden">
+                                        Avanza
+                                    </button>
+                                </div>
+
+                                <span class="text-slate-600 font-bold text-md">-</span>
+
+                                <!-- Input Visitante -->
+                                <div class="flex flex-col items-center gap-1">
+                                    <div class="flex items-center gap-1">
+                                        <span class="text-[9px] text-slate-500 font-bold tracking-widest" id="lbl-pred-v">FRA</span>
+                                        <span id="pred-flag-v-mini" class="text-base">🇫🇷</span>
+                                    </div>
+                                    <input type="number" id="input-pred-v" value="1" min="0" class="w-14 h-10 theme-input border rounded-lg text-center text-lg font-bold focus:border-cyan-500 focus:outline-none">
+                                    
+                                    <!-- Clasifica Visitante (Eliminatorias) -->
+                                    <button onclick="toggleAdvance('pred', 'V')" id="adv-pred-v" class="elim-filter mt-1 px-2.5 py-0.5 text-[8px] font-bold rounded border border-transparent bg-slate-855 text-slate-500 transition-all uppercase tracking-wider hidden">
+                                        Avanza
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- RESULTADO REAL (Marcador de Cancha) -->
+                        <div class="bg-slate-950/20 dark:bg-slate-950/80 rounded-xl p-3 border border-white/5 relative flex flex-col justify-between">
+                            <span class="text-[11px] font-bold text-slate-400 uppercase tracking-widest block mb-3 text-center">🏁 Resultado Real Oficial</span>
+                            <div class="flex items-center justify-center gap-3">
+                                
+                                <!-- Input Local Real -->
+                                <div class="flex flex-col items-center gap-1">
+                                    <div class="flex items-center gap-1">
+                                        <span id="real-flag-l-mini" class="text-base">🇦🇷</span>
+                                        <span class="text-[9px] text-slate-500 font-bold tracking-widest" id="lbl-real-l">ARG</span>
+                                    </div>
+                                    <input type="number" id="input-real-l" value="3" min="0" class="w-14 h-10 theme-input border rounded-lg text-center text-lg font-bold focus:border-white focus:outline-none">
+                                    
+                                    <!-- Clasificó Local Real (Eliminatorias) -->
+                                    <button onclick="toggleAdvance('real', 'L')" id="adv-real-l" class="elim-filter mt-1 px-2.5 py-0.5 text-[8px] font-bold rounded border border-transparent bg-slate-855 text-slate-500 transition-all uppercase tracking-wider hidden">
+                                        Avanzó
+                                    </button>
+                                </div>
+
+                                <span class="text-slate-600 font-bold text-md">-</span>
+
+                                <!-- Input Visitante Real -->
+                                <div class="flex flex-col items-center gap-1">
+                                    <div class="flex items-center gap-1">
+                                        <span class="text-[9px] text-slate-500 font-bold tracking-widest" id="lbl-real-v">FRA</span>
+                                        <span id="real-flag-v-mini" class="text-base">🇫🇷</span>
+                                    </div>
+                                    <input type="number" id="input-real-v" value="3" min="0" class="w-14 h-10 theme-input border rounded-lg text-center text-lg font-bold focus:border-white focus:outline-none">
+                                    
+                                    <!-- Clasificó Visitante Real (Eliminatorias) -->
+                                    <button onclick="toggleAdvance('real', 'V')" id="adv-real-v" class="elim-filter mt-1 px-2.5 py-0.5 text-[8px] font-bold rounded border border-transparent bg-slate-855 text-slate-500 transition-all uppercase tracking-wider hidden">
+                                        Avanzó
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Botón de efectos acústicos para simulación inmersiva -->
+                    <div class="mt-4 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs">
+                        <span class="text-slate-500 font-mono text-[10px]">VERIFYING ENGINE ACTIVE</span>
+                        <button onclick="playSound('cheer')" class="w-full sm:w-auto text-[11px] text-cyan-400 hover:text-cyan-300 transition-all flex items-center justify-center gap-1 border border-cyan-500/20 hover:border-cyan-500/40 px-3 py-1 rounded bg-cyan-950/40">
+                            📢 Celebración del Estadio (Gol)
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- AUDITORÍA DE RESULTADOS (Columna Derecha - 5 Cols) -->
+            <!-- MEJORA DE UX CLAVE: lg:sticky e h-fit fijan esta tarjeta en pantalla de PC para que no requiera scroll al editar datos -->
+            <div class="lg:col-span-5 space-y-6 lg:sticky lg:top-24 h-fit self-start">
+                
+                <!-- TERMINAL O PANTALLA DE RESULTADOS -->
+                <div class="cyber-card rounded-xl p-5 sm:p-6 border border-emerald-500/20 relative overflow-hidden flex flex-col justify-between min-h-[350px] sm:min-h-[390px] shadow-2xl">
+                    <div class="absolute -right-24 -bottom-24 w-64 h-64 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none"></div>
+                    
+                    <div>
+                        <!-- Terminal Header -->
+                        <div class="flex items-center justify-between border-b border-slate-800/80 pb-3.5">
+                            <span class="text-xs font-bold uppercase text-slate-400 tracking-wider flex items-center gap-2">
+                                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Calculadora Instantánea
+                            </span>
+                            <span class="text-[10px] bg-emerald-950 text-emerald-400 px-2 py-0.5 rounded mono-font">AUTO-RUN</span>
+                        </div>
+
+                        <!-- Estado Actual Informado -->
+                        <div id="status-panel" class="text-center mt-5 sm:mt-6">
+                            <div class="inline-block px-3 py-1 rounded bg-rose-500/10 border border-rose-500/20 text-rose-400 text-[10px] font-bold uppercase tracking-wider mb-2" id="res-badge">
+                                Sin Puntos
+                            </div>
+                            <h4 class="text-xs text-slate-500 uppercase tracking-wider font-bold">Puntaje Procesado</h4>
+                            
+                            <!-- Número Gigante de Puntos -->
+                            <div class="flex items-center justify-center gap-2 mt-1">
+                                <span class="text-5xl sm:text-6xl font-black title-text mono-font transition-all duration-300" id="res-points">0</span>
+                                <span class="text-base font-bold text-cyan-400" id="res-points-lbl">Pts</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mensaje Explicativo del Motor del VAR -->
+                    <div class="bg-slate-900/10 dark:bg-slate-900/40 border border-white/5 rounded-lg p-3 sm:p-4 mt-4">
+                        <div class="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1.5 flex items-center gap-1.5">
+                            <span>ℹ</span> Análisis Tecnológico:
+                        </div>
+                        <p class="text-xs text-slate-300 leading-relaxed" id="res-description">
+                            Modifica cualquier marcador para auditar los puntos de forma instantánea.
+                        </p>
+                    </div>
+
+                    <!-- Indicador de Firma Corporativa -->
+                    <div class="flex items-center justify-between text-[9px] text-slate-600 mt-4 pt-3 border-t border-slate-900/80 mono-font">
+                        <span>METRIC CORE: COMPLIANT v3.6</span>
+                        <span>BY TCS GROUP CO.</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- FOOTER CORPORATIVO -->
+    <footer class="max-w-7xl mx-auto px-4 mt-12 sm:mt-16 pt-6 border-t border-slate-900 text-center flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500" onclick="event.stopPropagation()">
+        <p>CONSOLA INTERACTIVA DE QUINIELA TCS. TODOS LOS DERECHOS RESERVADOS.</p>
+        <p class="mono-font text-slate-600">MD5_CHECKSUM: AB4829D0091AF4C0C_V3_6_RESPONSIVE_THEMED</p>
+    </footer>
+
+    <!-- LOGIC SYSTEM (JavaScript & Physics Engine) -->
+    <script>
+        // Variables globales de estado
+        let systemMode = 'grupos'; 
+        let predAdv = 'L'; 
+        let realAdv = 'L'; 
+        let audioCtx = null;
+        let isDarkMode = true;
+
+        // Variables de física de balones interactivos
+        const activeBalls = [];
+        const gravity = 0.35;
+        const bounceCoeff = 0.72;
+        const frictionX = 0.99;
+
+        // Diccionario de banderas ampliado
+        const flagMap = {
+            "ARG": "🇦🇷", "FRA": "🇫🇷", "URU": "🇺🇾", "CRC": "🇨🇷", "IRN": "🇮🇷",
+            "KOR": "🇰🇷", "BEL": "🇧🇪", "BRA": "🇧🇷", "GER": "🇩🇪", "ALE": "🇩🇪",
+            "ING": "🏴󠁧󠁢󠁥󠁮󠁧󠁿", "POR": "🇵🇹", "ESP": "🇪🇸", "ITA": "🇮🇹", "MEX": "🇲🇽",
+            "COL": "🇨🇴", "VEN": "🇻🇪", "USA": "🇺🇸", "ENG": "🏴󠁧󠁢󠁥󠁮󠁧󠁿", "NED": "🇳🇱",
+            "ECU": "🇪🇨", "SEN": "🇸🇳", "KSA": "🇸🇦", "JPN": "🇯🇵", "CAN": "🇨🇦",
+            "MAR": "🇲🇦", "CRO": "🇭🇷", "SUI": "🇨🇭", "CMR": "🇨🇲", "CHI": "🇨🇱",
+            "PER": "🇵🇪", "EGY": "🇪🇬", "NGA": "🇳🇬", "DEN": "🇩🇰", "SWE": "🇸🇪"
+        };
+
+        // Escenarios Predefinidos vinculados directamente al reglamento unificado
+        const scenarioData = {
+            caso1: {
+                mode: 'grupos',
+                nameL: 'URU', nameV: 'CRC',
+                emojiL: '🇺🇾', emojiV: '🇨🇷',
+                pL: 2, pV: 1,
+                rL: 1, rV: 3,
+                stage: 'Caso de Estudio - Regla "No Acertado"',
+                exp: 'El usuario pronosticó una victoria de **Uruguay por 2-1**, pero el resultado real fue una victoria de **Costa Rica por 1-3**. Al no coincidir el ganador ni el marcador, se asignan **0 puntos** de forma estricta.'
+            },
+            caso2: {
+                mode: 'grupos',
+                nameL: 'ARG', nameV: 'IRN',
+                emojiL: '🇦🇷', emojiV: '🇮🇷',
+                pL: 5, pV: 0,
+                rL: 1, rV: 0,
+                stage: 'Caso de Estudio - Regla "Ganador Acertado"',
+                exp: 'El usuario pronosticó una victoria holgada de **Argentina (5-0)**. Como Argentina ganó efectivamente (1-0), el usuario acertó la tendencia ganadora obteniendo **1 punto** (Ganador Acertado), a pesar de errar el marcador exacto.'
+            },
+            caso3: {
+                mode: 'grupos',
+                nameL: 'KOR', nameV: 'BEL',
+                emojiL: '🇰🇷', emojiV: '🇧🇪',
+                pL: 0, pV: 1,
+                rL: 0, rV: 1,
+                stage: 'Caso de Estudio - Regla "Marcador Exacto"',
+                exp: 'Acierto exacto del marcador (0-1). Como ningún equipo superó la barrera de los 3 goles individuales en el partido real, se otorgan de forma estándar los **3 puntos de bonificación base**.'
+            },
+            alemania: {
+                mode: 'grupos',
+                nameL: 'BRA', nameV: 'GER',
+                emojiL: '🇧🇷', emojiV: '🇩🇪',
+                pL: 1, pV: 7,
+                rL: 1, rV: 7,
+                stage: 'Caso de Estudio - Regla "Puntos extras por Goleada"',
+                exp: '¡Acierto histórico de Goleada! Se acertó plenamente el marcador exacto (1-7). Como Alemania anotó más de 3 goles individuales (marcó 7), se premia con **puntos extras por goleada**, asignando 1 punto por cada gol real del partido, sumando un total de **8 puntos**.'
+            },
+            portugal: {
+                mode: 'eliminatoria',
+                nameL: 'ING', nameV: 'POR',
+                emojiL: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', emojiV: '🇵🇹',
+                pL: 1, pV: 1, predAdv: 'L', 
+                rL: 0, rV: 0, realAdv: 'V', 
+                stage: 'Caso de Estudio - Regla "Fase Eliminatoria"',
+                exp: 'En Rondas Eliminatorias, los escenarios de puntuación cambian según el clasificado real de la llave:<br><br>' +
+                     '• **Aciertas empate, marcador y ganador (clasificado)**: Obtienes **3 puntos**. (Ejemplo: predices 1-1 con avance de Portugal, el partido queda 1-1 en tiempo regular y clasifica Portugal).<br>' +
+                     '• **Aciertas empate y ganador (clasificado) pero no el marcador**: Obtienes **1 punto**. (Ejemplo: predices 1-1 con avance de Portugal, el partido regular queda 2-2 y avanza Portugal).<br>' +
+                     '• **Filtro Estricto de Eliminatoria**: Si fallas en indicar el equipo que clasifica/avanza de ronda, el puntaje final es automáticamente de **0 puntos**, sin importar si acertaste el marcador regular.'
+            }
+        };
+
+        let currentSelectedScenarioKey = 'caso1';
+
+        // Manejo del Cambio de Tema Claro / Oscuro
+        function toggleTheme(event) {
+            if (event) event.stopPropagation();
+            isDarkMode = !isDarkMode;
+            const body = document.body;
+            const themePath = document.getElementById('theme-path');
+            
+            if (isDarkMode) {
+                body.classList.remove('light-mode');
+                // Icono Luna
+                themePath.setAttribute('d', 'M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z');
+            } else {
+                body.classList.add('light-mode');
+                // Icono Sol
+                themePath.setAttribute('d', 'M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z');
+            }
+            playSound('whistle');
+        }
+
+        // Reloj Dinámico
+        function updateClock() {
+            const now = new Date();
+            let hours = now.getHours();
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12; 
+            const timeStr = `${String(hours).padStart(2, '0')}:${minutes}:${seconds} ${ampm}`;
+            const clockEl = document.getElementById('live-clock');
+            if (clockEl) clockEl.innerText = timeStr;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // Inicializador del Audio Context
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function playSound(type) {
+            initAudio();
+            if (!audioCtx) return;
+
+            if (type === 'whistle') {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(2600, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(3100, audioCtx.currentTime + 0.08);
+
+                gain.gain.setValueAtTime(0, audioCtx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.2, audioCtx.currentTime + 0.04);
+                gain.gain.setValueAtTime(0.2, audioCtx.currentTime + 0.1);
+                gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.3);
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.3);
+            } else if (type === 'cheer') {
+                const bufferSize = audioCtx.sampleRate * 1.0;
+                const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+                const data = buffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) {
+                    data[i] = Math.random() * 2 - 1;
+                }
+                const noiseNode = audioCtx.createBufferSource();
+                noiseNode.buffer = buffer;
+
+                const filter = audioCtx.createBiquadFilter();
+                filter.type = 'bandpass';
+                filter.frequency.value = 400;
+                filter.Q.value = 1.0;
+
+                const gain = audioCtx.createGain();
+                gain.gain.setValueAtTime(0, audioCtx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.2, audioCtx.currentTime + 0.12);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.95);
+
+                noiseNode.connect(filter);
+                filter.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                noiseNode.start();
+                noiseNode.stop(audioCtx.currentTime + 1.0);
+            }
+        }
+
+        function playWhistle() {
+            playSound('whistle');
+        }
+
+        // Selector de escenarios interactivos
+        function selectScenario(key) {
+            currentSelectedScenarioKey = key;
+            const data = scenarioData[key];
+
+            // Remoción de clases activas
+            document.querySelectorAll('.scenario-card').forEach(el => el.classList.remove('active'));
+            const cardEl = document.getElementById('card-' + key);
+            if (cardEl) cardEl.classList.add('active');
+
+            // Llenar campos del Decodificador Central
+            document.getElementById('deco-stage').innerText = data.stage;
+            document.getElementById('deco-flag-l').innerText = data.emojiL;
+            document.getElementById('deco-flag-v').innerText = data.emojiV;
+            document.getElementById('deco-name-l').innerText = data.nameL;
+            document.getElementById('deco-name-v').innerText = data.nameV;
+            document.getElementById('deco-pred').innerText = `${data.pL} - ${data.pV}`;
+            
+            let realStr = `Real: ${data.rL} - ${data.rV}`;
+            if (data.mode === 'eliminatoria') {
+                const winner = data.realAdv === 'L' ? data.nameL : data.nameV;
+                realStr += ` (${winner} avanza)`;
+            }
+            document.getElementById('deco-real').innerText = realStr;
+            document.getElementById('deco-explanation').innerHTML = data.exp.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+
+            if (window.innerWidth < 1024) {
+                const decoderHeader = document.getElementById('deco-stage');
+                if (decoderHeader) {
+                    decoderHeader.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
+            }
+        }
+
+        // Inyección rápida al simulador
+        function injectCurrentScenarioToSimulator() {
+            const data = scenarioData[currentSelectedScenarioKey];
+
+            document.getElementById('eq-name-l').value = data.nameL;
+            document.getElementById('eq-name-v').value = data.nameV;
+            
+            document.getElementById('input-pred-l').value = data.pL;
+            document.getElementById('input-pred-v').value = data.pV;
+            document.getElementById('input-real-l').value = data.rL;
+            document.getElementById('input-real-v').value = data.rV;
+
+            if (data.mode === 'eliminatoria') {
+                predAdv = data.predAdv || 'L';
+                realAdv = data.realAdv || 'L';
+            }
+            
+            changeMode(data.mode);
+            syncFlagsAndLabels();
+            playSound('whistle');
+
+            // Desplazamiento suave al simulador
+            const simulatorEl = document.getElementById('modulo-var');
+            if (simulatorEl) {
+                simulatorEl.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        // Sincronización en tiempo real de banderas y etiquetas
+        function syncFlagsAndLabels() {
+            const nameL = document.getElementById('eq-name-l').value.trim().toUpperCase() || 'LOC';
+            const nameV = document.getElementById('eq-name-v').value.trim().toUpperCase() || 'VIS';
+
+            const flagL = flagMap[nameL] || '🏳';
+            const flagV = flagMap[nameV] || '🏳';
+
+            document.getElementById('eq-emoji-l').innerText = flagL;
+            document.getElementById('eq-emoji-v').innerText = flagV;
+
+            document.getElementById('pred-flag-l-mini').innerText = flagL;
+            document.getElementById('pred-flag-v-mini').innerText = flagV;
+            document.getElementById('real-flag-l-mini').innerText = flagL;
+            document.getElementById('real-flag-v-mini').innerText = flagV;
+
+            document.getElementById('lbl-pred-l').innerText = nameL;
+            document.getElementById('lbl-pred-v').innerText = nameV;
+            document.getElementById('lbl-real-l').innerText = nameL;
+            document.getElementById('lbl-real-v').innerText = nameV;
+
+            runAudit();
+        }
+
+        // Cambiar fase del torneo
+        function changeMode(mode) {
+            systemMode = mode;
+            const btnGrupos = document.getElementById('switch-grupos');
+            const btnElim = document.getElementById('switch-elim');
+            const toggles = document.querySelectorAll('.elim-filter');
+
+            if (mode === 'grupos') {
+                btnGrupos.className = "py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider border transition-all duration-300 bg-cyan-950 text-cyan-400 border-cyan-500/30";
+                btnElim.className = "py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider border transition-all duration-300 bg-slate-900/50 text-slate-500 border-transparent hover:text-slate-300";
+                toggles.forEach(el => el.classList.add('hidden'));
+            } else {
+                btnElim.className = "py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider border transition-all duration-300 bg-purple-950 text-purple-400 border-purple-500/30";
+                btnGrupos.className = "py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider border transition-all duration-300 bg-slate-900/50 text-slate-500 border-transparent hover:text-slate-300";
+                toggles.forEach(el => el.classList.remove('hidden'));
+                updateAdvanceUI();
+            }
+            runAudit();
+        }
+
+        // Alternar equipo clasificado
+        function toggleAdvance(panel, team) {
+            if (panel === 'pred') {
+                predAdv = team;
+            } else {
+                realAdv = team;
+            }
+            updateAdvanceUI();
+            runAudit();
+        }
+
+        function updateAdvanceUI() {
+            const pL = document.getElementById('adv-pred-l');
+            const pV = document.getElementById('adv-pred-v');
+            const rL = document.getElementById('adv-real-l');
+            const rV = document.getElementById('adv-real-v');
+
+            if (predAdv === 'L') {
+                pL.className = "elim-filter mt-2 px-3 py-1 text-[9px] font-bold rounded border border-cyan-500/30 bg-cyan-500/10 text-cyan-400 transition-all uppercase tracking-wider";
+                pV.className = "elim-filter mt-2 px-3 py-1 text-[9px] font-bold rounded border border-transparent bg-slate-800 text-slate-500 transition-all uppercase tracking-wider";
+            } else {
+                pL.className = "elim-filter mt-2 px-3 py-1 text-[9px] font-bold rounded border border-transparent bg-slate-800 text-slate-500 transition-all uppercase tracking-wider";
+                pV.className = "elim-filter mt-2 px-3 py-1 text-[9px] font-bold rounded border border-cyan-500/30 bg-cyan-500/10 text-cyan-400 transition-all uppercase tracking-wider";
+            }
+
+            if (realAdv === 'L') {
+                rL.className = "elim-filter mt-2 px-3 py-1 text-[9px] font-bold rounded border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 transition-all uppercase tracking-wider";
+                rV.className = "elim-filter mt-2 px-3 py-1 text-[9px] font-bold rounded border border-transparent bg-slate-800 text-slate-500 transition-all uppercase tracking-wider";
+            } else {
+                rL.className = "elim-filter mt-2 px-3 py-1 text-[9px] font-bold rounded border border-transparent bg-slate-800 text-slate-500 transition-all uppercase tracking-wider";
+                rV.className = "elim-filter mt-2 px-3 py-1 text-[9px] font-bold rounded border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 transition-all uppercase tracking-wider";
+            }
+        }
+
+        // Cálculo principal del Dictamen de Puntos
+        function calculatePoints(pL, pV, rL, rV, mode, pAdv, rAdv, nameL, nameV) {
+            const flagL = flagMap[nameL] || '🏳';
+            const flagV = flagMap[nameV] || '🏳';
+
+            const pWin = pL > pV ? 'L' : (pV > pL ? 'V' : 'D');
+            const rWin = rL > rV ? 'L' : (rV > rL ? 'V' : 'D');
+
+            const exact = (pL === rL && pV === rV);
+            const trend = (pWin === rWin);
+
+            let points = 0;
+            let badgeText = "No Acertado ❌";
+            let badgeClass = "bg-rose-500/10 border border-rose-500/20 text-rose-400";
+            let desc = "";
+
+            if (mode === 'eliminatoria' && pAdv !== rAdv) {
+                points = 0;
+                badgeText = "Filtro Eliminatoria 🛡";
+                badgeClass = "bg-purple-500/10 border border-purple-500/20 text-purple-400";
+                const realClass = rAdv === 'L' ? nameL : nameV;
+                const predClass = pAdv === 'L' ? nameL : nameV;
+                const emojiRealClass = rAdv === 'L' ? flagL : flagV;
+                const emojiPredClass = pAdv === 'L' ? flagL : flagV;
+
+                desc = `Filtro de clasificación erróneo. Predijiste que avanzaba ${emojiPredClass} <strong>${predClass}</strong>, pero clasificó oficialmente el rival ${emojiRealClass} <strong>${realClass}</strong>. 0 pts de forma estricta.`;
+            } else {
+                if (exact) {
+                    if (rL >= 4 || rV >= 4) {
+                        points = rL + rV;
+                        badgeText = "Puntos extras por Goleada ⚡";
+                        badgeClass = "bg-amber-500/10 border border-amber-500/20 text-amber-500";
+                        desc = `¡Goleada! Pronosticaste exactamente el marcador de <strong>${rL}-${rV}</strong> y al menos un equipo anotó 4 o más goles individuales. Sumas **puntos extras por goleada**: 1 pt por cada gol, totalizando <strong>${points} Puntos</strong>.`;
+                    } else {
+                        points = 3;
+                        badgeText = "Marcador Exacto ☑";
+                        badgeClass = "bg-emerald-500/10 border border-emerald-500/20 text-emerald-500";
+                        desc = `¡Marcador Exacto! Acertaste el resultado pleno de <strong>${rL}-${rV}</strong>. Sumas la bonificación fija de <strong>3 Puntos</strong>.`;
+                    }
+                } else if (trend) {
+                    points = 1;
+                    badgeText = "Ganador Acertado 📈";
+                    badgeClass = "bg-blue-500/10 border border-blue-500/20 text-blue-500";
+                    
+                    let trendName = "el Empate 🤝";
+                    if (rWin === 'L') trendName = `la victoria de ${flagL} <strong>${nameL}</strong>`;
+                    if (rWin === 'V') trendName = `la victoria de ${flagV} <strong>${nameV}</strong>`;
+
+                    desc = `¡Ganador Acertado! Lograste atinarle a la tendencia de juego (${trendName}), pero erraste el conteo de goles. Obtienes <strong>1 Punto</strong>.`;
+                } else {
+                    points = 0;
+                    badgeText = "Sin Coincidencias ❌";
+                    badgeClass = "bg-rose-500/10 border border-rose-500/20 text-rose-500";
+                    desc = `Ningún acierto de tendencia (ganador/empate) ni goles exactos en la predicción. Se te asignan <strong>0 Puntos</strong>.`;
+                }
+
+                if (mode === 'eliminatoria') {
+                    const classFlag = rAdv === 'L' ? flagL : flagV;
+                    const classText = rAdv === 'L' ? nameL : nameV;
+                    desc += ` (Acierto correcto del clasificado de la llave: ${classFlag} <strong>${classText}</strong>)`;
+                }
+            }
+
+            return { points, badgeText, badgeClass, desc };
+        }
+
+        // Ejecutar Auditoría Instantánea del Simulador
+        function runAudit() {
+            const pL = parseInt(document.getElementById('input-pred-l').value);
+            const pV = parseInt(document.getElementById('input-pred-v').value);
+            const rL = parseInt(document.getElementById('input-real-l').value);
+            const rV = parseInt(document.getElementById('input-real-v').value);
+
+            if (isNaN(pL) || isNaN(pV) || isNaN(rL) || isNaN(rV)) return;
+
+            const nameL = document.getElementById('eq-name-l').value.trim().toUpperCase() || 'LOC';
+            const nameV = document.getElementById('eq-name-v').value.trim().toUpperCase() || 'VIS';
+
+            const audit = calculatePoints(pL, pV, rL, rV, systemMode, predAdv, realAdv, nameL, nameV);
+
+            // Actualización de UI
+            const resBadge = document.getElementById('res-badge');
+            const resPoints = document.getElementById('res-points');
+            const resPointsLbl = document.getElementById('res-points-lbl');
+            const resDesc = document.getElementById('res-description');
+
+            resBadge.innerText = audit.badgeText;
+            resBadge.className = "inline-block px-3 py-1 rounded text-[10px] font-bold uppercase tracking-wider mb-2 " + audit.badgeClass;
+            
+            if (resPoints.innerText !== String(audit.points)) {
+                resPoints.classList.add('flash-active');
+                setTimeout(() => resPoints.classList.remove('flash-active'), 400);
+            }
+            resPoints.innerText = audit.points;
+            resPointsLbl.innerText = audit.points === 1 ? "Pt" : "Pts";
+            resDesc.innerHTML = audit.desc;
+        }
+
+        // ==========================================
+        // MOTOR DE FÍSICA Y BALONES INTERACTIVOS
+        // ==========================================
+        function spawnSoccerBall(event) {
+            if (event) event.stopPropagation();
+            playSound('whistle');
+
+            const trophyBtn = document.getElementById('trophy-btn');
+            const rect = trophyBtn.getBoundingClientRect();
+            const spawnX = rect.left + rect.width / 2;
+            const spawnY = rect.bottom;
+
+            createBall(spawnX, spawnY);
+        }
+
+        // Permitir lanzar balones desde cualquier clic en el fondo vacío del body
+        function spawnSoccerBallFromBackground(event) {
+            createBall(event.clientX, event.clientY);
+        }
+
+        function createBall(x, y) {
+            const ballEl = document.createElement('div');
+            ballEl.style.position = 'fixed';
+            ballEl.style.left = '0px';
+            ballEl.style.top = '0px';
+            ballEl.style.width = '55px';
+            ballEl.style.height = '55px';
+            ballEl.style.zIndex = '9999';
+            ballEl.style.cursor = 'pointer';
+            ballEl.style.pointerEvents = 'auto';
+
+            ballEl.innerHTML = `
+                <svg viewBox="0 0 100 100" class="w-full h-full filter drop-shadow-[0_8px_16px_rgba(0,0,0,0.6)]">
+                    <circle cx="50" cy="50" r="47" fill="#ffffff" stroke="#0f172a" stroke-width="3.5"/>
+                    <polygon points="50,36 62,45 57,58 43,58 38,45" fill="#0f172a"/>
+                    <line x1="50" y1="36" x2="50" y2="15" stroke="#0f172a" stroke-width="3"/>
+                    <line x1="62" y1="45" x2="81" y2="39" stroke="#0f172a" stroke-width="3"/>
+                    <line x1="57" y1="58" x2="71" y2="78" stroke="#0f172a" stroke-width="3"/>
+                    <line x1="43" y1="58" x2="29" y2="78" stroke="#0f172a" stroke-width="3"/>
+                    <line x1="38" y1="45" x2="19" y2="39" stroke="#0f172a" stroke-width="3"/>
+                    <polygon points="50,15 36,5 24,15 41,21" fill="#0f172a" stroke="#0f172a" stroke-width="1"/>
+                    <polygon points="50,15 64,5 76,15 59,21" fill="#0f172a" stroke="#0f172a" stroke-width="1"/>
+                    <polygon points="81,39 92,28 96,44 87,49" fill="#0f172a" stroke="#0f172a" stroke-width="1"/>
+                    <polygon points="71,78 85,73 88,88 73,92" fill="#0f172a" stroke="#0f172a" stroke-width="1"/>
+                    <polygon points="29,78 15,73 12,88 27,92" fill="#0f172a" stroke="#0f172a" stroke-width="1"/>
+                    <polygon points="19,39 8,28 4,44 13,49" fill="#0f172a" stroke="#0f172a" stroke-width="1"/>
+                    <circle cx="50" cy="50" r="47" fill="black" opacity="0.1" style="mix-blend-mode: multiply;"/>
+                </svg>
+            `;
+
+            document.body.appendChild(ballEl);
+
+            const ballObj = {
+                element: ballEl,
+                x: x - 27.5,
+                y: y - 27.5,
+                vx: (Math.random() - 0.5) * 12, 
+                vy: -5 - Math.random() * 5,       
+                radius: 27.5,
+                angle: 0,
+                vAngle: (Math.random() - 0.5) * 15
+            };
+
+            // Eventos de interacción
+            ballEl.addEventListener('mousedown', (e) => {
+                e.stopPropagation();
+                kickBall(ballObj, e);
+            });
+            ballEl.addEventListener('touchstart', (e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                kickBall(ballObj, e.touches[0]);
+            });
+
+            activeBalls.push(ballObj);
+
+            if (activeBalls.length === 1) {
+                requestAnimationFrame(updatePhysics);
+            }
+        }
+
+        function kickBall(ball, event) {
+            playSound('cheer');
+            
+            ball.vy = -12 - Math.random() * 6; 
+            ball.vx = (Math.random() - 0.5) * 16; 
+            ball.vAngle = (Math.random() - 0.5) * 40; 
+
+            const phrases = ["⚽ ¡GOL!", "🔥 ¡TCS!", "📣 ¡VAR!", "🚀 ¡PUM!", "💥 ¡SIII!"];
+            const txt = phrases[Math.floor(Math.random() * phrases.length)];
+            
+            const pop = document.createElement('div');
+            pop.className = "floating-text absolute text-cyan-400 font-extrabold text-sm uppercase tracking-widest z-[10000] pointer-events-none drop-shadow-[0_0_8px_rgba(6,182,212,0.6)]";
+            pop.style.left = `${event.clientX - 20}px`;
+            pop.style.top = `${event.clientY - 20}px`;
+            pop.innerText = txt;
+            document.body.appendChild(pop);
+
+            setTimeout(() => {
+                pop.remove();
+            }, 800);
+        }
+
+        function updatePhysics() {
+            if (activeBalls.length === 0) return;
+
+            const w = window.innerWidth;
+            const h = window.innerHeight;
+
+            for (let i = activeBalls.length - 1; i >= 0; i--) {
+                const b = activeBalls[i];
+
+                b.vy += gravity;
+                b.vx *= frictionX;
+
+                b.x += b.vx;
+                b.y += b.vy;
+                b.angle += b.vx * 0.8;
+
+                // Rebote Suelo
+                if (b.y + b.radius * 2 >= h) {
+                    b.y = h - b.radius * 2;
+                    b.vy = -b.vy * bounceCoeff;
+                    b.vx *= 0.95;
+                    if (Math.abs(b.vy) < 1.5) b.vy = 0;
+                }
+
+                // Rebote Techo
+                if (b.y <= 0) {
+                    b.y = 0;
+                    b.vy = -b.vy * bounceCoeff;
+                }
+
+                // Rebote Izquierda
+                if (b.x <= 0) {
+                    b.x = 0;
+                    b.vx = -b.vx * bounceCoeff;
+                }
+
+                // Rebote Derecha
+                if (b.x + b.radius * 2 >= w) {
+                    b.x = w - b.radius * 2;
+                    b.vx = -b.vx * bounceCoeff;
+                }
+
+                b.element.style.transform = `translate3d(${b.x}px, ${b.y}px, 0) rotate(${b.angle}deg)`;
+            }
+
+            requestAnimationFrame(updatePhysics);
+        }
+
+        // ==========================================
+        // SISTEMA REACTIVO EN TIEMPO REAL
+        // ==========================================
+        const realtimeInputs = [
+            'input-pred-l',
+            'input-pred-v',
+            'input-real-l',
+            'input-real-v',
+            'eq-name-l',
+            'eq-name-v'
+        ];
+
+        realtimeInputs.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) {
+                el.addEventListener('input', () => {
+                    syncFlagsAndLabels();
+                    runAudit();
+                });
+                el.addEventListener('change', () => {
+                    syncFlagsAndLabels();
+                    runAudit();
+                });
+            }
+        });
+
+        // ==========================================
+        // INICIALIZACIÓN
+        // ==========================================
+        window.onload = function() {
+            selectScenario('caso1');
+            syncFlagsAndLabels();
+            runAudit();
+            updateAdvanceUI();
+            changeMode('grupos');
+        };
+    </script>
+</body>
+</html>
