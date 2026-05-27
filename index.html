@@ -322,11 +322,14 @@ viewBox="0 0 561.17 183.6"
                         Bienvenido a nuestra página interactiva sobre las reglas de la Quiniela. Haz clic en las tarjetas de reglamento abajo para visualizar la descripción correspondiente y de forma online mediante nuestro simulador de resultados. <strong class="text-cyan-400">¡Haz clic en la Copa del Mundo o en el fondo de la pantalla para lanzar balones interactivos!</strong>
                     </p>
                 </div>
-                <div class="shrink-0 flex items-center gap-2">
-                    <button onclick="playWhistle()" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3.5 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold rounded-lg text-xs uppercase tracking-wider shadow-lg shadow-cyan-500/10 hover:shadow-cyan-500/20 transition-all duration-300">
-                        <span>📣</span> Silbato del Árbitro
-                    </button>
-                </div>
+             <div class="shrink-0 flex flex-col sm:flex-row items-center gap-2 w-full sm:w-auto">
+    <button onclick="openCalendarModal()" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-lg text-xs uppercase tracking-wider shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/40 transition-all duration-300">
+        <span>📅</span> Ver Calendario
+    </button>
+    <button onclick="playWhistle()" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3.5 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold rounded-lg text-xs uppercase tracking-wider shadow-lg shadow-cyan-500/10 hover:shadow-cyan-500/20 transition-all duration-300">
+        <span>📣</span> Silbato del Árbitro
+    </button>
+</div>
             </div>
         </section>
 
@@ -1287,6 +1290,69 @@ viewBox="0 0 561.17 183.6"
             updateAdvanceUI();
             changeMode('grupos');
         };
+        
+        // ==========================================
+        // CONTROL DEL MODAL DEL CALENDARIO
+        // ==========================================
+        function openCalendarModal() {
+            const modal = document.getElementById('calendar-modal');
+            const modalBox = modal.querySelector('div.relative');
+            
+            // Sonido de interacción (opcional)
+            playSound('whistle');
+            
+            // Mostrar modal
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            
+            // Pequeño retraso para que la animación CSS surta efecto
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modalBox.classList.remove('scale-95');
+                modalBox.classList.add('scale-100');
+            }, 10);
+            
+            // Evita que el fondo haga scroll mientras el modal está abierto
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeCalendarModal() {
+            const modal = document.getElementById('calendar-modal');
+            const modalBox = modal.querySelector('div.relative');
+            
+            // Iniciar animación de cierre
+            modal.classList.add('opacity-0');
+            modalBox.classList.remove('scale-100');
+            modalBox.classList.add('scale-95');
+            
+            // Ocultar después de la animación
+            setTimeout(() => {
+                modal.classList.remove('flex');
+                modal.classList.add('hidden');
+                document.body.style.overflow = ''; // Restaurar scroll
+            }, 300);
+        }
     </script>
 </body>
+<div id="calendar-modal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-slate-950/80 backdrop-blur-sm transition-opacity duration-300 opacity-0" onclick="closeCalendarModal()">
+        
+        <div class="relative w-[95%] max-w-5xl h-[85vh] bg-[#070D2E] rounded-2xl border border-cyan-500/30 shadow-2xl shadow-cyan-500/20 overflow-hidden flex flex-col transform scale-95 transition-transform duration-300" onclick="event.stopPropagation()">
+            
+            <div class="flex items-center justify-between px-5 py-3 bg-slate-900/80 border-b border-cyan-500/20 backdrop-blur-md z-10">
+                <h3 class="text-white font-bold tracking-wider uppercase text-xs sm:text-sm flex items-center gap-2">
+                    <span>📅</span> Calendario Oficial (Hora Venezuela)
+                </h3>
+                <button onclick="closeCalendarModal()" class="text-slate-400 hover:text-rose-400 transition-colors p-1 bg-slate-800/50 rounded-lg hover:bg-slate-800">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="flex-1 w-full h-full relative">
+                <iframe src="index (3).html" class="absolute inset-0 w-full h-full border-none" title="Calendario del Mundial"></iframe>
+            </div>
+            
+        </div>
+    </div>
 </html>
