@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mundial FIFA 2026 — Calendario Venezuela</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --tcs-blue: #0033A0;
+    --tcs-blue-dark: #00257A;
+    --tcs-blue-light: #1A4FBB;
+    --tcs-accent: #00AEEF;
+    --tcs-white: #FFFFFF;
+    --grass-green: #1a7a2a;
+    --grass-light: #22953a;
+    --gold: #FFD700;
+    --field-line: rgba(255,255,255,0.15);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Barlow', sans-serif;
+    background: #070D2E;
+    color: #fff;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── HERO HEADER ── */
+  .hero {
+    background: linear-gradient(160deg, var(--tcs-blue-dark) 0%, var(--tcs-blue) 50%, var(--tcs-blue-light) 100%);
+    position: relative;
+    padding: 2rem 2rem 3.5rem;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      repeating-linear-gradient(90deg, var(--field-line) 0, var(--field-line) 1px, transparent 1px, transparent 80px),
+      repeating-linear-gradient(0deg, var(--field-line) 0, var(--field-line) 1px, transparent 1px, transparent 80px);
+    opacity: 0.4;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -2px; left: 0; right: 0;
+    height: 60px;
+    background: #070D2E;
+    clip-path: ellipse(55% 100% at 50% 100%);
+  }
+
+  .hero-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+    margin-bottom: 1.5rem;
+  }
+
+  /* TCS Logo — compact */
+  .tcs-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 8px;
+    padding: 6px 14px;
+    backdrop-filter: blur(4px);
+  }
+
+  .tcs-tagline {
+    font-size: 9px;
+    color: rgba(255,255,255,0.7);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    line-height: 1.2;
+    margin-top: 2px;
+  }
+
+  /* Venezuela flag pill */
+  .flag-pill {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 20px;
+    padding: 5px 14px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    letter-spacing: 1px;
+    color: rgba(255,255,255,0.85);
+  }
+
+  .flag-emoji { font-size: 18px; }
+
+  /* Title block */
+  .hero-title {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+  }
+
+  .world-cup-text {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(48px, 8vw, 88px);
+    line-height: 0.9;
+    letter-spacing: 4px;
+    color: #fff;
+    text-shadow: 0 4px 24px rgba(0,0,0,0.4);
+  }
+
+  .world-cup-text span {
+    color: var(--tcs-accent);
+  }
+
+  .subtitle-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 10px;
+  }
+
+  .subtitle-line {
+    height: 1px;
+    width: 60px;
+    background: linear-gradient(90deg, transparent, var(--tcs-accent));
+  }
+  .subtitle-line.right { background: linear-gradient(90deg, var(--tcs-accent), transparent); }
+
+  .subtitle-text {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px;
+    letter-spacing: 4px;
+    color: var(--tcs-accent);
+    text-transform: uppercase;
+  }
+
+  /* Balls decoration */
+  .ball {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #fff, #ddd 60%, #aaa);
+    opacity: 0.08;
+    z-index: 1;
+  }
+  .ball-1 { width: 220px; height: 220px; top: -80px; right: -60px; }
+  .ball-2 { width: 140px; height: 140px; bottom: 30px; left: -40px; }
+
+  /* ── MAIN CONTENT ── */
+  .main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+  }
+
+  /* Section heading */
+  .section-heading {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 2.5rem 0 1.2rem;
+  }
+
+  .section-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--tcs-blue);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+    border: 1px solid rgba(0, 174, 239, 0.4);
+  }
+
+  .section-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 3px;
+    color: #fff;
+  }
+
+  .section-label span {
+    color: var(--tcs-accent);
+  }
+
+  .group-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--tcs-accent);
+    background: rgba(0,174,239,0.12);
+    border: 1px solid rgba(0,174,239,0.3);
+    padding: 2px 10px;
+    border-radius: 20px;
+    margin-left: auto;
+    text-transform: uppercase;
+  }
+
+  /* ── GROUPS GRID ── */
+  .groups-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.2rem;
+  }
+
+  .group-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 14px;
+    overflow: hidden;
+    transition: transform 0.2s, border-color 0.2s;
+  }
+
+  .group-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(0,174,239,0.4);
+  }
+
+  .group-header {
+    background: var(--tcs-blue);
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .group-letter {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    color: var(--tcs-accent);
+    line-height: 1;
+  }
+
+  .group-teams {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: rgba(255,255,255,0.7);
+    text-transform: uppercase;
+    line-height: 1.4;
+  }
+
+  .soccer-icon {
+    margin-left: auto;
+    font-size: 22px;
+    opacity: 0.4;
+  }
+
+  .match-list {
+    padding: 8px 0;
+  }
+
+  .match-row {
+    display: grid;
+    grid-template-columns: 56px 1fr auto;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    transition: background 0.15s;
+  }
+
+  .match-row:last-child { border-bottom: none; }
+  .match-row:hover { background: rgba(255,255,255,0.04); }
+
+  .match-date {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 12px;
+    color: var(--tcs-accent);
+    letter-spacing: 0.5px;
+    font-weight: 600;
+  }
+
+  .match-teams {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: #fff;
+    letter-spacing: 0.3px;
+  }
+
+  .match-vs {
+    color: rgba(255,255,255,0.35);
+    font-size: 11px;
+    font-weight: 400;
+    margin: 0 3px;
+  }
+
+  .match-time {
+    font-family: 'Barlow', sans-serif;
+    font-size: 12px;
+    color: rgba(255,255,255,0.6);
+    background: rgba(255,255,255,0.08);
+    padding: 3px 9px;
+    border-radius: 20px;
+    white-space: nowrap;
+    font-weight: 500;
+  }
+
+  /* ── KNOCKOUT PHASES ── */
+  .knockout-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+    margin-top: 0.5rem;
+  }
+
+  .phase-card {
+    background: rgba(0,51,160,0.3);
+    border: 1px solid rgba(0,174,239,0.2);
+    border-radius: 12px;
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    transition: transform 0.2s, background 0.2s;
+  }
+
+  .phase-card:hover {
+    transform: translateY(-2px);
+    background: rgba(0,51,160,0.5);
+  }
+
+  .phase-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 2px;
+    color: #fff;
+  }
+
+  .phase-dates {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    color: var(--tcs-accent);
+    font-weight: 600;
+  }
+
+  /* ── FINAL CARD ── */
+  .final-card {
+    margin-top: 2.5rem;
+    background: linear-gradient(135deg, var(--tcs-blue) 0%, var(--tcs-blue-dark) 60%, #00194F 100%);
+    border: 2px solid var(--gold);
+    border-radius: 18px;
+    padding: 2rem 2.5rem;
+    position: relative;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .final-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: repeating-linear-gradient(
+      45deg,
+      rgba(255,215,0,0.03) 0, rgba(255,215,0,0.03) 1px,
+      transparent 1px, transparent 30px
+    );
+  }
+
+  .final-tag {
+    display: inline-block;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--gold);
+    text-transform: uppercase;
+    border: 1px solid rgba(255,215,0,0.5);
+    padding: 3px 12px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+  }
+
+  .final-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 42px;
+    letter-spacing: 4px;
+    line-height: 1;
+    color: #fff;
+  }
+
+  .final-meta {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 15px;
+    color: rgba(255,255,255,0.75);
+    margin-top: 10px;
+    line-height: 1.7;
+    letter-spacing: 0.5px;
+  }
+
+  .final-meta strong {
+    color: #fff;
+    font-weight: 600;
+  }
+
+  .final-time-block {
+    text-align: center;
+    background: rgba(0,0,0,0.3);
+    border: 1px solid rgba(255,215,0,0.3);
+    border-radius: 14px;
+    padding: 16px 24px;
+    position: relative;
+    z-index: 1;
+    flex-shrink: 0;
+  }
+
+  .final-time-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+
+  .final-time-value {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 44px;
+    color: #fff;
+    line-height: 1.1;
+    letter-spacing: 2px;
+  }
+
+  .final-time-tz {
+    font-size: 11px;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 1px;
+  }
+
+  /* Trophy SVG */
+  .trophy-wrap {
+    position: absolute;
+    right: 200px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.06;
+    pointer-events: none;
+  }
+
+  /* ── FOOTER NOTE ── */
+  .footer-note {
+    margin-top: 2.5rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    padding: 12px 18px;
+    font-family: 'Barlow', sans-serif;
+    font-size: 13px;
+    color: rgba(255,255,255,0.5);
+  }
+
+  .note-icon {
+    color: var(--tcs-accent);
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  /* ── FIELD DIVIDER ── */
+  .field-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 2.5rem 0 0;
+  }
+
+  .field-divider-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(0,174,239,0.3), transparent);
+  }
+
+  .field-divider-ball {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 2px solid rgba(0,174,239,0.4);
+    background: rgba(0,174,239,0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+  }
+
+  @media (max-width: 600px) {
+    .final-card { grid-template-columns: 1fr; }
+    .final-time-block { text-align: left; }
+    .trophy-wrap { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="ball ball-1"></div>
+  <div class="ball ball-2"></div>
+
+  <div class="hero-top">
+    <div class="tcs-logo">
+      <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" height="34px" version="1.1"
+        style="shape-rendering:geometricPrecision;text-rendering:geometricPrecision;image-rendering:optimizeQuality;fill-rule:evenodd;clip-rule:evenodd"
+        viewBox="0 0 561.17 183.6" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <defs>
+          <style type="text/css">
+            .tl0 {fill:#ffffff}
+            .tl1 {fill:#003399;stroke:#003399;stroke-width:2.14;stroke-miterlimit:22.9256}
+            .tl2 {fill:#006EFF;stroke:#006EFF;stroke-width:2.14;stroke-miterlimit:22.9256}
+            .tl3 {fill:#06D7A0;stroke:#06D7A0;stroke-width:2.14;stroke-miterlimit:22.9256}
+            .tl4 {fill:#ffffff;fill-rule:nonzero}
+          </style>
+        </defs>
+        <g>
+          <path class="tl0" d="M415.59 120.7c-2.34,4.67 -5.63,8.63 -10.03,11.59 -4.8,3.23 -10.14,4.83 -15.92,4.83 -4.13,0 -8.13,-0.79 -11.89,-2.47 -3.64,-1.63 -6.85,-3.9 -9.54,-6.84 -2.73,-2.97 -4.81,-6.4 -6.3,-10.14 -1.61,-4.02 -2.34,-8.25 -2.34,-12.58 0,-4.35 0.74,-8.61 2.33,-12.67 1.5,-3.82 3.57,-7.35 6.27,-10.45 2.67,-3.06 5.86,-5.49 9.51,-7.27 3.76,-1.84 7.77,-2.73 11.96,-2.73 5.93,0 11.28,1.88 16.01,5.45 4.26,3.21 7.53,7.25 9.9,11.96l20.07 -13.07c-4.77,-7.66 -11.08,-13.78 -18.97,-18.29 -8.37,-4.78 -17.38,-7.15 -27.01,-7.15 -7.35,0 -14.47,1.36 -21.21,4.3 -6.46,2.82 -12.27,6.69 -17.25,11.68 -4.99,4.98 -8.86,10.79 -11.68,17.25 -2.91,6.68 -4.3,13.71 -4.3,20.99 0,7.28 1.39,14.31 4.3,20.99 2.82,6.46 6.69,12.27 11.68,17.26 4.98,4.98 10.79,8.85 17.25,11.67 6.74,2.94 13.86,4.3 21.21,4.3 9.63,0 18.64,-2.36 27.01,-7.14 7.89,-4.51 14.2,-10.64 18.97,-18.3l-20.03 -13.17z"/>
+          <path class="tl0" d="M295.27 24.27c-10.97,0.4 -24.8,4.03 -24.8,17.23l0 22.26 -15.73 0 0 20 15.73 0 0 34.87c0,5.23 0.98,10.3 3.09,15.09 2.04,4.62 4.83,8.77 8.4,12.35 3.58,3.57 7.76,6.32 12.43,8.28 4.85,2.04 9.96,3 15.23,3l19.06 0 0 -21.1 -19.06 0c-3.9,0 -7.3,-1.38 -10.1,-4.09 -2.81,-2.73 -4.25,-6.12 -4.25,-10.04l0 -97.85z"/>
+          <polygon class="tl1" points="328.66,61.98 300.43,61.98 313.59,85.53 328.66,85.53"/>
+          <path class="tl0" d="M511.48 82.25l11.23 -20.45c-5.55,-3.51 -11.53,-6.2 -17.84,-8.07 -6.7,-1.98 -13.59,-3.08 -20.58,-3.08 -5.32,0 -10.65,0.69 -15.7,2.4 -4.36,1.48 -8.47,3.62 -11.96,6.66 -3.26,2.83 -5.76,6.25 -7.53,10.19 -1.86,4.13 -2.66,8.55 -2.66,13.07l0 0.43c0,4.48 0.71,9.28 3.08,13.16 2.07,3.4 4.74,6.25 8.02,8.5 3.45,2.37 7.23,4.15 11.22,5.4 4.31,1.35 8.65,2.6 13.02,3.76l0.12 0.03 0.12 0.05c0.48,0.19 1,0.35 1.52,0.41 0.87,0.09 1.72,0.33 2.54,0.65 3.4,1.05 6.81,2.27 10.03,3.8 3.25,1.54 5.36,4.12 5.36,7.8 0,8.46 -8.01,10.38 -15,10.38 -6.42,0 -12.64,-1.22 -18.53,-3.78 -5.21,-2.26 -9.83,-5.44 -13.86,-9.36l-12.56 19.82c6.32,4.58 13.19,8.26 20.55,10.9 7.66,2.76 15.61,4.18 23.75,4.18 10.38,0 21.39,-1.97 29.52,-8.89 7.41,-6.31 10.28,-14.78 10.28,-24.37l0 -0.22c0,-3.68 -0.59,-7.42 -2.28,-10.72 -1.55,-3.04 -3.71,-5.6 -6.4,-7.7 -3.04,-2.37 -6.45,-4.24 -10,-5.72 -4.28,-1.79 -8.65,-3.39 -13.06,-4.86 -0.44,-0.15 -0.88,-0.28 -1.33,-0.41 -0.27,-0.08 -0.56,-0.14 -0.84,-0.14l-0.34 0 -0.33 -0.11c-2.27,-0.75 -4.52,-1.57 -6.75,-2.43 -2.16,-0.83 -4.28,-1.76 -6.33,-2.83 -1.77,-0.92 -3.49,-2.02 -4.95,-3.39 -1.46,-1.37 -2.41,-3.1 -2.41,-5.15 0,-1.87 0.36,-3.81 1.53,-5.33 0.92,-1.2 2.07,-2.15 3.41,-2.86 1.36,-0.73 2.83,-1.16 4.36,-1.33 1.24,-0.14 2.49,-0.23 3.73,-0.23 5.68,0 11.23,1 16.51,3.09 4.13,1.65 7.98,3.85 11.34,6.75z"/>
+          <path class="tl4" d="M546.81 53.71c2.46,0 4.83,0.61 7.08,1.85 2.27,1.23 4.05,2.99 5.34,5.29 1.3,2.3 1.94,4.71 1.94,7.22 0,2.51 -0.63,4.89 -1.9,7.16 -1.27,2.27 -3.04,4.03 -5.3,5.31 -2.28,1.26 -4.66,1.9 -7.16,1.9 -2.5,0 -4.89,-0.64 -7.16,-1.9 -2.27,-1.28 -4.03,-3.04 -5.31,-5.31 -1.26,-2.27 -1.9,-4.65 -1.9,-7.16 0,-2.51 0.65,-4.92 1.94,-7.22 1.3,-2.3 3.08,-4.06 5.34,-5.29 2.26,-1.24 4.62,-1.85 7.09,-1.85zm0.01 2.84c-1.98,0 -3.87,0.49 -5.68,1.48 -1.82,0.98 -3.24,2.4 -4.29,4.25 -1.04,1.84 -1.56,3.78 -1.56,5.8 0,2.01 0.51,3.93 1.53,5.75 1.01,1.82 2.43,3.24 4.26,4.27 1.82,1.02 3.74,1.53 5.74,1.53 2.01,0 3.93,-0.51 5.74,-1.53 1.83,-1.03 3.25,-2.45 4.27,-4.27 1.03,-1.82 1.54,-3.74 1.54,-5.75 0,-2.02 -0.53,-3.96 -1.57,-5.8 -1.04,-1.85 -2.47,-3.27 -4.29,-4.25 -1.82,-0.99 -3.72,-1.48 -5.69,-1.48zm-6.5 19.21l0 -15.22 3.08 0c2.9,0 4.52,0.02 4.87,0.04 1.02,0.09 1.82,0.29 2.39,0.61 0.56,0.31 1.03,0.8 1.42,1.46 0.37,0.65 0.57,1.38 0.57,2.18 0,1.1 -0.36,2.03 -1.08,2.81 -0.72,0.79 -1.72,1.27 -3.01,1.46 0.46,0.17 0.82,0.36 1.07,0.57 0.25,0.2 0.59,0.59 1.03,1.16 0.11,0.16 0.48,0.77 1.12,1.86l1.79 3.07 -3.84 0 -1.26 -2.48c-0.85,-1.66 -1.56,-2.71 -2.12,-3.14 -0.56,-0.43 -1.26,-0.65 -2.12,-0.65l-0.8 0 0 6.27 -3.11 0zm3.11 -8.69l1.25 0c1.78,0 2.88,-0.07 3.31,-0.2 0.43,-0.13 0.77,-0.37 1.02,-0.71 0.25,-0.34 0.37,-0.72 0.37,-1.16 0,-0.42 -0.12,-0.79 -0.36,-1.12 -0.25,-0.33 -0.59,-0.56 -1.04,-0.7 -0.45,-0.14 -1.55,-0.22 -3.3,-0.22l-1.25 0 0 4.11z"/>
+          <path class="tl2" d="M149.94 9.65l69.43 89.59c5.39,7.03 4.71,18.79 -5.72,20.7 -9.1,1.66 -43.3,1.08 -47.45,1.2 -5.77,-0.26 -9.09,-5.3 -12.19,-8.36l-19.86 -22.79 -20.64 23.56c-5,5.38 -10.81,7.89 -17.24,8.2l-35.22 0.52c-14.4,-1.4 -18.61,-8.77 -12.46,-22.23l69.27 -91.41c8.37,-11.05 24.03,-9.36 32.08,1.02z"/>
+          <path class="tl3" d="M105.14 175.11l69.44 -92.05c6.38,-10.41 2.95,-20.36 -9.61,-20.55l-43.84 -0.65c-5.77,0.33 -9.03,5.41 -12.08,8.51l-19.57 23.05 -20.94 -23.29c-5.07,-5.32 -10.91,-7.75 -17.35,-7.97l-33.53 -0.06c-13.93,-0.03 -20.15,7.78 -14.53,20.9 0.79,1.83 2.61,4.29 3.82,5.85l67.15 85.94c8.1,10.4 22.28,10.12 31.04,0.32z"/>
+          <path class="tl1" d="M153.02 111.64l21.56 -28.58c6.66,-9.12 3.59,-20.36 -8.34,-20.53l-45.11 -0.68c-5.77,0.34 -9.03,5.43 -12.08,8.52l-19.57 23.05 -19.46 -21.65 -19.2 25.33c-9.15,12.08 -6.36,23.56 10.23,25.17l35.22 -0.52c6.43,-0.31 12.24,-2.82 17.24,-8.2l20.64 -23.56 18.87 21.65z"/>
+        </g>
+      </svg>
+      <div class="tcs-tagline">Experience certainty.</div>
+    </div>
+
+    <div class="flag-pill">
+      <span class="flag-emoji">🇻🇪</span>
+      <span>Hora Venezuela (GMT-4)</span>
+    </div>
+  </div>
+
+  <div class="hero-title">
+    <div class="world-cup-text">MUNDIAL <span>FIFA</span> 2026</div>
+    <div class="subtitle-row">
+      <div class="subtitle-line"></div>
+      <div class="subtitle-text">Calendario Completo · Fase de Grupos &amp; Eliminatorias</div>
+      <div class="subtitle-line right"></div>
+    </div>
+  </div>
+</header>
+
+<main class="main">
+
+  <div class="section-heading">
+    <div class="section-icon">⚽</div>
+    <div class="section-label">Fase de <span>Grupos</span></div>
+  </div>
+
+  <div class="groups-grid">
+
+    <div class="group-card">
+      <div class="group-header">
+        <div class="group-letter">A</div>
+        <div class="group-teams">México · Sudáfrica<br>Corea del Sur · Rep. Checa</div>
+        <div class="soccer-icon">⚽</div>
+      </div>
+      <div class="match-list">
+        <div class="match-row">
+          <div class="match-date">11 Jun</div>
+          <div class="match-teams">México <span class="match-vs">vs</span> Sudáfrica</div>
+          <div class="match-time">3:00 PM</div>
+        </div>
+        <div class="match-row">
+          <div class="match-date">11 Jun</div>
+          <div class="match-teams">Corea del Sur <span class="match-vs">vs</span> Rep. Checa</div>
+          <div class="match-time">10:00 PM</div>
+        </div>
+        <div class="match-row">
+          <div class="match-date">18 Jun</div>
+          <div class="match-teams">México <span class="match-vs">vs</span> Corea del Sur</div>
+          <div class="match-time">10:00 PM</div>
+        </div>
+        <div class="match-row">
+          <div class="match-date">18 Jun</div>
+          <div class="match-teams">Rep. Checa <span class="match-vs">vs</span> Sudáfrica</div>
+          <div class="match-time">1:00 PM</div>
+        </div>
+        <div class="match-row">
+          <div class="match-date">24 Jun</div>
+          <div class="match-teams">México <span class="match-vs">vs</span> Rep. Checa</div>
+          <div class="match-time">10:00 PM</div>
+        </div>
+        <div class="match-row">
+          <div class="match-date">24 Jun</div>
+          <div class="match-teams">Sudáfrica <span class="match-vs">vs</span> Corea del Sur</div>
+          <div class="match-time">10:00 PM</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="group-card">
+      <div class="group-header">
+        <div class="group-letter">B</div>
+        <div class="group-teams">Canadá · Bosnia<br>Qatar · Suiza</div>
+        <div class="soccer-icon">⚽</div>
+      </div>
+      <div class="match-list">
+        <div class="match-row">
+          <div class="match-date">12 Jun</div>
+          <div class="match-teams">Canadá <span class="match-vs">vs</span> Bosnia</div>
+          <div class="match-time">3:00 PM</div>
+        </div>
+        <div class="match-row">
+          <div class="match-date">13 Jun</div>
+          <div class="match-teams">Qatar <span class="match-vs">vs</span> Suiza</div>
+          <div class="match-time">3:00 PM</div>
+        </div>
+        <div class="match-row">
+          <div class="match-date">18 Jun</div>
+          <div class="match-teams">Canadá <span class="match-vs">vs</span> Qatar</div>
+          <div class="match-time">7:00 PM</div>
+        </div>
+        <div class="match-row">
+          <div class="match-date">18 Jun</div>
+          <div class="match-teams">Suiza <span class="match-vs">vs</span> Bosnia</div>
+          <div class="match-time">3:00 PM</div>
+        </div>
+        <div class="match-row">
+          <div class="match-date">24 Jun</div>
+          <div class="match-teams">Suiza <span class="match-vs">vs</span> Canadá</div>
+          <div class="match-time">3:00 PM</div>
+        </div>
+        <div class="match-row">
+          <div class="match-date">24 Jun</div>
+          <div class="match-teams">Bosnia <span class="match-vs">vs</span> Qatar</div>
+          <div class="match-time">3:00 PM</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="group-card">
+      <div class="group-header">
+        <div class="group-letter">C</div>
+        <div class="group-teams">Brasil · Marruecos<br>Haití · Escocia</div>
+        <div class="soccer-icon">⚽</div>
+      </div>
+      <div class="match-list">
+        <div class="match-row">
+          <div class="match-date">13 Jun</div>
+          <div class="match-teams">Brasil <span class="match-vs">vs</span> Marruecos</div>
+          <div class="match-time">6:00 PM</div>
+        </div>
+        <div class="match-row">
+          <div class="match-date">13 Jun</div>
+          <div class="match-teams">Haití <span class="match-vs">vs</span> Escocia</div>
+          <div class="match-time">9:00 PM</div>
+        </div>
+        <div class="match-row">
+          <div class="match-date">19 Jun</div>
+          <div class="match-teams">Brasil <span class="match-vs">vs</span> Escocia</div>
+          <div class="match-time">6:00 PM</div>
+        </div>
+        <div class="match-row">
+          <div class="match-date">19 Jun</div>
+          <div class="match-teams">Marruecos <span class="match-vs">vs</span> Haití</div>
+          <div class="match-time">3:00 PM</div>
+        </div>
+        <div class="match-row">
+          <div class="match-date">25 Jun</div>
+          <div class="match-teams">Brasil <span class="match-vs">vs</span> Haití</div>
+          <div class="match-time">9:00 PM</div>
+        </div>
+        <div class="match-row">
+          <div class="match-date">25 Jun</div>
+          <div class="match-teams">Escocia <span class="match-vs">vs</span> Marruecos</div>
+          <div class="match-time">9:00 PM</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="group-card">
+      <div class="group-header">
+        <div class="group-letter">D</div>
+        <div class="group-teams">Argentina · Japón<br>Suecia · Nigeria</div>
+        <div class="soccer-icon">⚽</div>
+      </div>
+      <div class="match-list">
+        <div class="match-row">
+          <div class="match-date">14 Jun</div>
+          <div class="match-teams">Argentina <span class="match-vs">vs</span> Japón</div>
+          <div class="match-time">3:00 PM</div>
+        </div>
+        <div class="match-row">
+          <div class="match-date">14 Jun</div>
+          <div class="match-teams">Suecia <span class="match-vs">vs</span> Nigeria</div>
+          <div class="match-time">7:00 PM</div>
+        </div>
+        <div class="match-row">
+          <div class="match-date">19 Jun</div>
+          <div class="match-teams">Argentina <span class="match-vs">vs</span> Suecia</div>
+          <div class="match-time">4:00 PM</div>
+        </div>
+        <div class="match-row">
+          <div class="match-date">19 Jun</div>
+          <div class="match-teams">Nigeria <span class="match-vs">vs</span> Japón</div>
+          <div class="match-time">8:00 PM</div>
+        </div>
+        <div class="match-row">
+          <div class="match-date">25 Jun</div>
+          <div class="match-teams">Nigeria <span class="match-vs">vs</span> Argentina</div>
+          <div class="match-time">6:00 PM</div>
+        </div>
+        <div class="match-row">
+          <div class="match-date">25 Jun</div>
+          <div class="match-teams">Japón <span class="match-vs">vs</span> Suecia</div>
+          <div class="match-time">6:00 PM</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="group-card">
+      <div class="group-header">
+        <div class="group-letter">E</div>
+        <div class="group-teams">EE.UU. · Colombia<br>Senegal · Polonia</div>
+        <div class="soccer-icon">⚽</div>
+      </div>
+      <div class="match-list">
+        <div class="match-row">
+          <div class="match-date">14 Jun</div>
+          <div class="match-teams">EE.UU. <span class="match-vs">vs</span> Colombia</div>
+          <div class="match-time">9:00 PM</div>
+        </div>
+        <div class="match-row">
+          <div class="match-date">15 Jun</div>
+          <div class="match-teams">Senegal <span class="match-vs">vs</span> Polonia</div>
+          <div class="match-time">3:00 PM</div>
+        </div>
+        <div class="match-row">
+          <div class="match-date">20 Jun</div>
+          <div class="match-teams">EE.UU. <span class="match-vs">vs</span> Senegal</div>
+          <div class="match-time">5:00 PM</div>
+        </div>
+        <div class="match-row">
+          <div class="match-date">20 Jun</div>
+          <div class="match-teams">Polonia <span class="match-vs">vs</span> Colombia</div>
+          <div class="match-time">9:00 PM</div>
+        </div>
+        <div class="match-row">
+          <div class="match-date">25 Jun</div>
+          <div class="match-teams">Polonia <span class="match-vs">vs</span> EE.UU.</div>
+          <div class="match-time">3:00 PM</div>
+        </div>
+        <div class="match-row">
+          <div class="match-date">25 Jun</div>
+          <div class="match-teams">Colombia <span class="match-vs">vs</span> Senegal</div>
+          <div class="match-time">3:00 PM</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="group-card">
+      <div class="group-header">
+        <div class="group-letter">F</div>
+        <div class="group-teams">Francia · Ecuador<br>Australia · Gales</div>
+        <div class="soccer-icon">⚽</div>
+      </div>
+      <div class="match-list">
+        <div class="match-row">
+          <div class="match-date">15 Jun</div>
+          <div class="match-teams">Francia <span class="match-vs">vs</span> Ecuador</div>
+          <div class="match-time">7:00 PM</div>
+        </div>
+        <div class="match-row">
+          <div class="match-date">15 Jun</div>
+          <div class="match-teams">Australia <span class="match-vs">vs</span> Gales</div>
+          <div class="match-time">10:00 PM</div>
+        </div>
+        <div class="match-row">
+          <div class="match-date">20 Jun</div>
+          <div class="match-teams">Francia <span class="match-vs">vs</span> Australia</div>
+          <div class="match-time">3:00 PM</div>
+        </div>
+        <div class="match-row">
+          <div class="match-date">20 Jun</div>
+          <div class="match-teams">Gales <span class="match-vs">vs</span> Ecuador</div>
+          <div class="match-time">8:00 PM</div>
+        </div>
+        <div class="match-row">
+          <div class="match-date">26 Jun</div>
+          <div class="match-teams">Gales <span class="match-vs">vs</span> Francia</div>
+          <div class="match-time">4:00 PM</div>
+        </div>
+        <div class="match-row">
+          <div class="match-date">26 Jun</div>
+          <div class="match-teams">Ecuador <span class="match-vs">vs</span> Australia</div>
+          <div class="match-time">4:00 PM</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="group-card">
+      <div class="group-header">
+        <div class="group-letter">G</div>
+        <div class="group-teams">España · Perú<br>Egipto · Serbia</div>
+        <div class="soccer-icon">⚽</div>
+      </div>
+      <div class="match-list">
+        <div class="match-row">
+          <div class="match-date">16 Jun</div>
+          <div class="match-teams">España <span class="match-vs">vs</span> Perú</div>
+          <div class="match-time">3:00 PM</div>
+        </div>
+        <div class="match-row">
+          <div class="match-date">16 Jun</div>
+          <div class="match-teams">Egipto <span class="match-vs">vs</span> Serbia</div>
+          <div class="match-time">7:00 PM</div>
+        </div>
+        <div class="match-row">
+          <div class="match-date">21 Jun</div>
+          <div class="match-teams">España <span class="match-vs">vs</span> Egipto</div>
+          <div class="match-time">4:00 PM</div>
+        </div>
+        <div class="match-row">
+          <div class="match-date">21 Jun</div>
+          <div class="match-teams">Serbia <span class="match-vs">vs</span> Perú</div>
+          <div class="match-time">8:00 PM</div>
+        </div>
+        <div class="match-row">
+          <div class="match-date">26 Jun</div>
+          <div class="match-teams">Serbia <span class="match-vs">vs</span> España</div>
+          <div class="match-time">8:00 PM</div>
+        </div>
+        <div class="match-row">
+          <div class="match-date">26 Jun</div>
+          <div class="match-teams">Perú <span class="match-vs">vs</span> Egipto</div>
+          <div class="match-time">8:00 PM</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="group-card">
+      <div class="group-header">
+        <div class="group-letter">H</div>
+        <div class="group-teams">Inglaterra · Chile<br>Arabia S. · Dinamarca</div>
+        <div class="soccer-icon">⚽</div>
+      </div>
+      <div class="match-list">
+        <div class="match-row">
+          <div class="match-date">16 Jun</div>
+          <div class="match-teams">Inglaterra <span class="match-vs">vs</span> Chile</div>
+          <div class="match-time">10:00 PM</div>
+        </div>
+        <div class="match-row">
+          <div class="match-date">17 Jun</div>
+          <div class="match-teams">Arabia S. <span class="match-vs">vs</span> Dinamarca</div>
+          <div class="match-time">3:00 PM</div>
+        </div>
+        <div class="match-row">
+          <div class="match-date">21 Jun</div>
+          <div class="match-teams">Inglaterra <span class="match-vs">vs</span> Arabia S.</div>
+          <div class="match-time">3:00 PM</div>
+        </div>
+        <div class="match-row">
+          <div class="match-date">21 Jun</div>
+          <div class="match-teams">Dinamarca <span class="match-vs">vs</span> Chile</div>
+          <div class="match-time">7:00 PM</div>
+        </div>
+        <div class="match-row">
+          <div class="match-date">26 Jun</div>
+          <div class="match-teams">Dinamarca <span class="match-vs">vs</span> Inglaterra</div>
+          <div class="match-time">10:00 PM</div>
+        </div>
+        <div class="match-row">
+          <div class="match-date">26 Jun</div>
+          <div class="match-teams">Chile <span class="match-vs">vs</span> Arabia S.</div>
+          <div class="match-time">10:00 PM</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="group-card">
+      <div class="group-header">
+        <div class="group-letter">I</div>
+        <div class="group-teams">Portugal · Uruguay<br>Irán · Austria</div>
+        <div class="soccer-icon">⚽</div>
+      </div>
+      <div class="match-list">
+        <div class="match-row">
+          <div class="match-date">17 Jun</div>
+          <div class="match-teams">Portugal <span class="match-vs">vs</span> Uruguay</div>
+          <div class="match-time">7:00 PM</div>
+        </div>
+        <div class="match-row">
+          <div class="match-date">17 Jun</div>
+          <div class="match-teams">Irán <span class="match-vs">vs</span> Austria</div>
+          <div class="match-time">10:00 PM</div>
+        </div>
+        <div class="match-row">
+          <div class="match-date">22 Jun</div>
+          <div class="match-teams">Portugal <span class="match-vs">vs</span> Irán</div>
+          <div class="match-time">4:00 PM</div>
+        </div>
+        <div class="match-row">
+          <div class="match-date">22 Jun</div>
+          <div class="match-teams">Austria <span class="match-vs">vs</span> Uruguay</div>
+          <div class="match-time">8:00 PM</div>
+        </div>
+        <div class="match-row">
+          <div class="match-date">27 Jun</div>
+          <div class="match-teams">Austria <span class="match-vs">vs</span> Portugal</div>
+          <div class="match-time">3:00 PM</div>
+        </div>
+        <div class="match-row">
+          <div class="match-date">27 Jun</div>
+          <div class="match-teams">Uruguay <span class="match-vs">vs</span> Irán</div>
+          <div class="match-time">3:00 PM</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="group-card">
+      <div class="group-header">
+        <div class="group-letter">J</div>
+        <div class="group-teams">Alemania · Venezuela<br>Camerún · Nva. Zelanda</div>
+        <div class="soccer-icon">⚽</div>
+      </div>
+      <div class="match-list">
+        <div class="match-row">
+          <div class="match-date">18 Jun</div>
+          <div class="match-teams">Alemania <span class="match-vs">vs</span> Venezuela</div>
+          <div class="match-time">3:00 PM</div>
+        </div>
+        <div class="match-row">
+          <div class="match-date">18 Jun</div>
+          <div class="match-teams">Camerún <span class="match-vs">vs</span> Nva. Zelanda</div>
+          <div class="match-time">7:00 PM</div>
+        </div>
+        <div class="match-row">
+          <div class="match-date">22 Jun</div>
+          <div class="match-teams">Alemania <span class="match-vs">vs</span> Camerún</div>
+          <div class="match-time">3:00 PM</div>
+        </div>
+        <div class="match-row">
+          <div class="match-date">22 Jun</div>
+          <div class="match-teams">Nva. Zelanda <span class="match-vs">vs</span> Venezuela</div>
+          <div class="match-time">7:00 PM</div>
+        </div>
+        <div class="match-row">
+          <div class="match-date">27 Jun</div>
+          <div class="match-teams">Nva. Zelanda <span class="match-vs">vs</span> Alemania</div>
+          <div class="match-time">6:00 PM</div>
+        </div>
+        <div class="match-row">
+          <div class="match-date">27 Jun</div>
+          <div class="match-teams">Venezuela <span class="match-vs">vs</span> Camerún</div>
+          <div class="match-time">6:00 PM</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="group-card">
+      <div class="group-header">
+        <div class="group-letter">K</div>
+        <div class="group-teams">Bélgica · Costa Rica<br>Ghana · Ucrania</div>
+        <div class="soccer-icon">⚽</div>
+      </div>
+      <div class="match-list">
+        <div class="match-row">
+          <div class="match-date">19 Jun</div>
+          <div class="match-teams">Bélgica <span class="match-vs">vs</span> Costa Rica</div>
+          <div class="match-time">3:00 PM</div>
+        </div>
+        <div class="match-row">
+          <div class="match-date">19 Jun</div>
+          <div class="match-teams">Ghana <span class="match-vs">vs</span> Ucrania</div>
+          <div class="match-time">7:00 PM</div>
+        </div>
+        <div class="match-row">
+          <div class="match-date">23 Jun</div>
+          <div class="match-teams">Bélgica <span class="match-vs">vs</span> Ghana</div>
+          <div class="match-time">4:00 PM</div>
+        </div>
+        <div class="match-row">
+          <div class="match-date">23 Jun</div>
+          <div class="match-teams">Ucrania <span class="match-vs">vs</span> Costa Rica</div>
+          <div class="match-time">8:00 PM</div>
+        </div>
+        <div class="match-row">
+          <div class="match-date">27 Jun</div>
+          <div class="match-teams">Ucrania <span class="match-vs">vs</span> Bélgica</div>
+          <div class="match-time">9:00 PM</div>
+        </div>
+        <div class="match-row">
+          <div class="match-date">27 Jun</div>
+          <div class="match-teams">Costa Rica <span class="match-vs">vs</span> Ghana</div>
+          <div class="match-time">9:00 PM</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="group-card">
+      <div class="group-header">
+        <div class="group-letter">L</div>
+        <div class="group-teams">P. Bajos · Panamá<br>C. de Marfil · Croacia</div>
+        <div class="soccer-icon">⚽</div>
+      </div>
+      <div class="match-list">
+        <div class="match-row">
+          <div class="match-date">19 Jun</div>
+          <div class="match-teams">P. Bajos <span class="match-vs">vs</span> Panamá</div>
+          <div class="match-time">10:00 PM</div>
+        </div>
+        <div class="match-row">
+          <div class="match-date">20 Jun</div>
+          <div class="match-teams">C. de Marfil <span class="match-vs">vs</span> Croacia</div>
+          <div class="match-time">3:00 PM</div>
+        </div>
+        <div class="match-row">
+          <div class="match-date">23 Jun</div>
+          <div class="match-teams">P. Bajos <span class="match-vs">vs</span> C. de Marfil</div>
+          <div class="match-time">3:00 PM</div>
+        </div>
+        <div class="match-row">
+          <div class="match-date">23 Jun</div>
+          <div class="match-teams">Croacia <span class="match-vs">vs</span> Panamá</div>
+          <div class="match-time">7:00 PM</div>
+        </div>
+        <div class="match-row">
+          <div class="match-date">27 Jun</div>
+          <div class="match-teams">Croacia <span class="match-vs">vs</span> P. Bajos</div>
+          <div class="match-time">10:00 PM</div>
+        </div>
+        <div class="match-row">
+          <div class="match-date">27 Jun</div>
+          <div class="match-teams">Panamá <span class="match-vs">vs</span> C. de Marfil</div>
+          <div class="match-time">10:00 PM</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="field-divider">
+    <div class="field-divider-line"></div>
+    <div class="field-divider-ball">🏆</div>
+    <div class="field-divider-line"></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="section-icon">🏆</div>
+    <div class="section-label">Fases <span>Eliminatorias</span></div>
+  </div>
+
+  <div class="knockout-grid">
+    <div class="phase-card">
+      <div class="phase-name">Dieciseisavos</div>
+      <div class="phase-dates">28 Jun — 3 Jul</div>
+    </div>
+    <div class="phase-card">
+      <div class="phase-name">Octavos de Final</div>
+      <div class="phase-dates">4 — 7 Jul</div>
+    </div>
+    <div class="phase-card">
+      <div class="phase-name">Cuartos de Final</div>
+      <div class="phase-dates">9 — 11 Jul</div>
+    </div>
+    <div class="phase-card">
+      <div class="phase-name">Semifinales</div>
+      <div class="phase-dates">14 — 15 Jul</div>
+    </div>
+    <div class="phase-card">
+      <div class="phase-name">Tercer Lugar</div>
+      <div class="phase-dates">18 Jul</div>
+    </div>
+  </div>
+
+  <div class="final-card">
+    <div class="trophy-wrap">
+      <svg width="180" height="200" viewBox="0 0 80 90" fill="white" xmlns="http://www.w3.org/2000/svg">
+        <rect x="28" y="75" width="24" height="6" rx="2"/>
+        <rect x="20" y="81" width="40" height="6" rx="2"/>
+        <path d="M20 10 Q10 10 10 25 Q10 45 30 50 L30 65 L50 65 L50 50 Q70 45 70 25 Q70 10 60 10 Z"/>
+      </svg>
+    </div>
+
+    <div style="position:relative;z-index:1;">
+      <div class="final-tag">⭐ Gran Final · FIFA World Cup 2026</div>
+      <div class="final-title">LA GRAN FINAL</div>
+      <div class="final-meta">
+        <strong>📍 MetLife Stadium</strong> — East Rutherford, Nueva Jersey<br>
+        <strong>📅 Domingo 19 de julio de 2026</strong>
+      </div>
+    </div>
+
+    <div class="final-time-block">
+      <div class="final-time-label">Hora Venezuela</div>
+      <div class="final-time-value">3:00<br><span style="font-size:28px;color:var(--gold)">PM</span></div>
+      <div class="final-time-tz">GMT-4 · VET</div>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    <span class="note-icon">ℹ</span>
+    <span>FIFA puede realizar ajustes oficiales en horarios o enfrentamientos. Todos los horarios están adaptados al huso horario local (GMT-4).</span>
+  </div>
+
+</main>
+
+</body>
+</html>
