@@ -83,6 +83,46 @@
             width: 1em;
         }
 
+        /* =============================================
+           ANIMACIÓN MÓVIL: Panel de Análisis Tecnológico
+           Solo aplica en pantallas menores a lg (1024px)
+           ============================================= */
+        @keyframes slide-in-right {
+            0%  { opacity: 0; transform: translateX(40px) scale(0.97); }
+            100%{ opacity: 1; transform: translateX(0)   scale(1);    }
+        }
+        @keyframes slide-out-left {
+            0%  { opacity: 1; transform: translateX(0)    scale(1);    }
+            100%{ opacity: 0; transform: translateX(-40px) scale(0.97); }
+        }
+        @media (max-width: 1023px) {
+            /* Panel de análisis con animación al entrar */
+            #decoder-panel.mobile-slide-in {
+                animation: slide-in-right 0.38s cubic-bezier(0.16, 1, 0.3, 1) both;
+            }
+            /* Botón volver: oculto por defecto, visible solo tras seleccionar regla en móvil */
+            #btn-volver-mobile {
+                display: none;
+                align-items: center;
+                gap: 6px;
+            }
+            #btn-volver-mobile.visible {
+                display: flex;
+            }
+            /* Pulse sutil en el botón para llamar la atención */
+            @keyframes pulse-border {
+                0%, 100% { box-shadow: 0 0 0 0 rgba(34, 211, 238, 0.4); }
+                50%       { box-shadow: 0 0 0 6px rgba(34, 211, 238, 0);  }
+            }
+            #btn-volver-mobile.visible {
+                animation: pulse-border 2s ease-in-out 0.5s 3;
+            }
+        }
+        @media (min-width: 1024px) {
+            /* En desktop el botón volver NUNCA se muestra */
+            #btn-volver-mobile { display: none !important; }
+        }
+
         /* Paneles tácticos de vidrio cibernético */
         .cyber-card {
             background: var(--card-bg);
@@ -497,7 +537,7 @@ viewBox="0 0 561.17 183.6"
                 </div>
 
                 <!-- Columna Derecha: Decodificador Central del VAR (7 Cols) -->
-                <div class="lg:col-span-7 cyber-card rounded-2xl p-4 sm:p-6 flex flex-col justify-between relative overflow-hidden">
+                <div id="decoder-panel" class="lg:col-span-7 cyber-card rounded-2xl p-4 sm:p-6 flex flex-col justify-between relative overflow-hidden">
                     
                     <!-- Línea de escaneo láser decorativa -->
                     <div class="absolute inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent opacity-40 radar-line pointer-events-none"></div>
@@ -508,8 +548,13 @@ viewBox="0 0 561.17 183.6"
                             <p class="text-[10px] sm:text-xs text-slate-500 mt-1" id="deco-stage">Fase de Grupos - Grupo D</p>
                         </div>
                         <div class="flex items-center gap-2">
-                            <button onclick="document.getElementById('rules-container').scrollIntoView({ behavior: 'smooth', block: 'nearest' })" class="lg:hidden text-[9px] sm:text-[10px] text-slate-950 font-bold tracking-widest mono-font bg-cyan-400 hover:bg-cyan-300 border border-cyan-400 px-2.5 py-1 rounded uppercase shrink-0 transition-colors">
-                                🔙 Volver
+                            <!-- Botón Volver: solo visible en móvil tras seleccionar una regla -->
+                            <button
+                                id="btn-volver-mobile"
+                                onclick="volverARules()"
+                                class="text-[9px] sm:text-[10px] text-slate-950 font-bold tracking-widest mono-font bg-cyan-400 hover:bg-cyan-300 active:bg-cyan-500 border border-cyan-400 px-3 py-1.5 rounded-lg uppercase shrink-0 transition-all duration-200"
+                                aria-label="Volver al listado de reglas">
+                                ← Volver
                             </button>
                             <span class="text-[9px] sm:text-[10px] text-cyan-400 tracking-widest mono-font bg-cyan-950/80 border border-cyan-800 px-2.5 py-1 rounded uppercase shrink-0 hidden sm:inline-block">
                                 Auditoría VAR
@@ -980,11 +1025,18 @@ viewBox="0 0 561.17 183.6"
         }
 
         // Selector de escenarios interactivos
+        /**
+         * Selecciona un escenario del reglamento y actualiza el panel de Análisis Tecnológico.
+         * En móvil (<1024px): hace scroll suave hacia el panel con animación de deslizamiento,
+         * y muestra el botón "Volver" para regresar al listado.
+         * En desktop: solo actualiza el contenido en el mismo lugar sin scroll.
+         * @param {string} key - Clave del escenario (ej: 'caso1', 'alemania', 'portugal')
+         */
         function selectScenario(key) {
             currentSelectedScenarioKey = key;
             const data = scenarioData[key];
 
-            // Remoción de clases activas
+            // Remoción de clases activas y activar tarjeta seleccionada
             document.querySelectorAll('.scenario-card').forEach(el => el.classList.remove('active'));
             const cardEl = document.getElementById('card-' + key);
             if (cardEl) cardEl.classList.add('active');
@@ -996,7 +1048,7 @@ viewBox="0 0 561.17 183.6"
             document.getElementById('deco-name-l').innerText = data.nameL;
             document.getElementById('deco-name-v').innerText = data.nameV;
             document.getElementById('deco-pred').innerText = `${data.pL} - ${data.pV}`;
-            
+
             let realStr = `Real: ${data.rL} - ${data.rV}`;
             if (data.mode === 'eliminatoria') {
                 const winner = data.realAdv === 'L' ? data.nameL : data.nameV;
@@ -1005,12 +1057,72 @@ viewBox="0 0 561.17 183.6"
             document.getElementById('deco-real').innerText = realStr;
             document.getElementById('deco-explanation').innerHTML = data.exp.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
 
+            // Aplicar Twemoji a las banderas del decodificador
+            if (typeof twemoji !== 'undefined') {
+                twemoji.parse(document.getElementById('deco-flag-l'), { folder: 'svg', ext: '.svg' });
+                twemoji.parse(document.getElementById('deco-flag-v'), { folder: 'svg', ext: '.svg' });
+            }
+
+            // --- Comportamiento exclusivo para MÓVIL (<1024px) ---
             if (window.innerWidth < 1024) {
-                const decoderHeader = document.getElementById('deco-stage');
-                if (decoderHeader) {
-                    decoderHeader.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                const decoderPanel = document.getElementById('decoder-panel');
+                const btnVolver    = document.getElementById('btn-volver-mobile');
+
+                if (decoderPanel) {
+                    // Reiniciar la animación quitando y volviendo a poner la clase
+                    decoderPanel.classList.remove('mobile-slide-in');
+                    // Forzar reflow para que la animación se re-ejecute
+                    void decoderPanel.offsetWidth;
+                    decoderPanel.classList.add('mobile-slide-in');
+
+                    // Scroll suave hacia el panel de análisis
+                    setTimeout(() => {
+                        decoderPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 60);
+                }
+
+                // Mostrar el botón Volver con animación de pulso
+                if (btnVolver) {
+                    btnVolver.classList.add('visible');
                 }
             }
+        }
+
+        /**
+         * Acción del botón "Volver" en móvil.
+         * Hace scroll de vuelta al listado de reglas, selecciona la primera regla
+         * y oculta el botón Volver.
+         * Solo se llama desde el botón #btn-volver-mobile (visible únicamente en móvil).
+         */
+        function volverARules() {
+            const rulesContainer = document.getElementById('rules-container');
+            const btnVolver      = document.getElementById('btn-volver-mobile');
+            const decoderPanel   = document.getElementById('decoder-panel');
+
+            // Ocultar el botón Volver
+            if (btnVolver) btnVolver.classList.remove('visible');
+
+            // Quitar la animación del panel
+            if (decoderPanel) decoderPanel.classList.remove('mobile-slide-in');
+
+            // Scroll suave al contenedor de tarjetas
+            if (rulesContainer) {
+                rulesContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+
+            // Tras el scroll, resaltar la primera regla visualmente
+            setTimeout(() => {
+                // Quitar selección activa de todas las tarjetas
+                document.querySelectorAll('.scenario-card').forEach(el => el.classList.remove('active'));
+                const firstCard = document.getElementById('card-caso1');
+                if (firstCard) {
+                    firstCard.classList.add('active');
+                    // Micro-animación de highlight para indicar dónde quedamos
+                    firstCard.style.transition = 'box-shadow 0.3s ease';
+                    firstCard.style.boxShadow = '0 0 0 2px rgba(34, 211, 238, 0.6)';
+                    setTimeout(() => { firstCard.style.boxShadow = ''; }, 800);
+                }
+            }, 400);
         }
 
         // Inyección rápida al simulador
