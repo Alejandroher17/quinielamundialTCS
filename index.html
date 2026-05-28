@@ -618,7 +618,7 @@
 
         <!-- SECCIÓN 2: GRID DE REGLAS INTERACTIVAS Y DECODIFICADOR CENTRAL (UNIFICADOS) -->
         <section class="space-y-4" onclick="event.stopPropagation()">
-            <div class="flex items-center gap-2">
+            <div id="reglamento-title" class="flex items-center gap-2">
                 <span class="text-cyan-400 text-lg">⚏</span>
                 <h3 class="text-base font-bold uppercase tracking-wider title-text">Reglamento Interactivo con Casos de
                     ejemplos</h3>
@@ -1388,7 +1388,7 @@
          * Solo se llama desde el botón #btn-volver-mobile (visible únicamente en móvil).
          */
         function volverARules() {
-            const rulesContainer = document.getElementById('rules-container');
+            const rulesTitle = document.getElementById('reglamento-title');
             const btnVolver = document.getElementById('btn-volver-mobile');
             const decoderPanel = document.getElementById('decoder-panel');
 
@@ -1398,24 +1398,15 @@
             // Quitar la animación del panel
             if (decoderPanel) decoderPanel.classList.remove('mobile-slide-in');
 
-            // Scroll suave al contenedor de tarjetas
-            if (rulesContainer) {
-                rulesContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
+            // Seleccionar silenciosamente la primera regla de nuevo para reiniciar textos
+            selectScenario('caso1', true);
 
-            // Tras el scroll, resaltar la primera regla visualmente
-            setTimeout(() => {
-                // Quitar selección activa de todas las tarjetas
-                document.querySelectorAll('.scenario-card').forEach(el => el.classList.remove('active'));
-                const firstCard = document.getElementById('card-caso1');
-                if (firstCard) {
-                    firstCard.classList.add('active');
-                    // Micro-animación de highlight para indicar dónde quedamos
-                    firstCard.style.transition = 'box-shadow 0.3s ease';
-                    firstCard.style.boxShadow = '0 0 0 2px rgba(34, 211, 238, 0.6)';
-                    setTimeout(() => { firstCard.style.boxShadow = ''; }, 800);
-                }
-            }, 400);
+            // Scroll suave hacia el título "Reglamento Interactivo", descontando el header sticky
+            if (rulesTitle) {
+                const rect = rulesTitle.getBoundingClientRect();
+                const offset = window.pageYOffset || document.documentElement.scrollTop;
+                window.scrollTo({ top: offset + rect.top - 100, behavior: 'smooth' });
+            }
         }
 
         // Inyección rápida al simulador
